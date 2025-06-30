@@ -75,4 +75,12 @@ dependencies {
 
     //Retrofit
     api(libs.bundles.retrofit)
+
+    //OkHttp
+    implementation(libs.bundles.okhttp)
+    testImplementation(libs.okhttp.mockwebserver)
+
+    //Moshi
+    implementation(libs.bundles.moshi)
+    ksp(libs.moshi.codegen)
 }
