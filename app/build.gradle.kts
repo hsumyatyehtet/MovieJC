@@ -62,4 +62,8 @@ dependencies {
 
     //compose navigation
     implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.lifecycle.process)
+    implementation(libs.lifecycle.livedata)
+    implementation(libs.lifecycle.viewmodel)
 }
