@@ -12,6 +12,7 @@ ksp = "2.0.21-1.0.27"
 navVersion = "2.9.0"
 lifecycle = "2.9.1"
 daggerHilt = "2.56.2"
+retrofit = "2.9.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -36,6 +37,8 @@ lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", ver
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "daggerHilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "daggerHilt" }
+retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -44,4 +47,7 @@ jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
+
+[bundles]
+retrofit = ["retrofit-core", "retrofit-moshi"]
 

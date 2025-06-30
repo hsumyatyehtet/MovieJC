@@ -72,4 +72,7 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    //Retrofit
+    api(libs.bundles.retrofit)
 }
