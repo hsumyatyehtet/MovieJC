@@ -19,6 +19,7 @@ timber = "5.0.1"
 chucker = "4.0.0"
 paging3 = "3.3.6"
 coroutineCore = "1.8.1"
+room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,6 +60,10 @@ paging-common = { module = "androidx.paging:paging-common-ktx", version.ref = "p
 paging-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging3" }
 coroutinecore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutineCore" }
 coroutinetest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineCore" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
