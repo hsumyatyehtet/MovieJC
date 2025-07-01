@@ -17,6 +17,8 @@ okhttp = "4.12.0"
 moshi = "1.15.0"
 timber = "5.0.1"
 chucker = "4.0.0"
+paging3 = "3.3.6"
+coroutineCore = "1.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,6 +55,10 @@ moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.re
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 chuckerlog = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 chuckerlogNoOp = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
+paging-common = { module = "androidx.paging:paging-common-ktx", version.ref = "paging3" }
+paging-runtime = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging3" }
+coroutinecore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutineCore" }
+coroutinetest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutineCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

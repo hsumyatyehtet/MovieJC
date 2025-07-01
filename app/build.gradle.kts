@@ -88,4 +88,11 @@ dependencies {
     implementation(libs.timber)
     debugImplementation(libs.chuckerlog)
     releaseImplementation(libs.chuckerlogNoOp)
+
+    // Paging
+    implementation(libs.paging.common)
+    implementation(libs.paging.runtime)
+
+    api(libs.coroutinecore)
+    testImplementation(libs.coroutinetest)
 }
