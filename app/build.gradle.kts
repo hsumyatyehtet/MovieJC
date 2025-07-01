@@ -83,4 +83,9 @@ dependencies {
     //Moshi
     implementation(libs.bundles.moshi)
     ksp(libs.moshi.codegen)
+
+    // logger
+    implementation(libs.timber)
+    debugImplementation(libs.chuckerlog)
+    releaseImplementation(libs.chuckerlogNoOp)
 }
