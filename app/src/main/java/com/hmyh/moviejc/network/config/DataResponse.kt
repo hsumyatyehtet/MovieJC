@@ -1,5 +1,6 @@
 package com.hmyh.moviejc.network.config
 
+import com.hmyh.moviejc.network.feature.home.response.MovieResponse
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -20,15 +21,24 @@ data class DataEmptyResponse(
 )
 
 @JsonClass(generateAdapter = true)
-data class PageResponse<T>(
-    @Json(name = "meta") val pageMeta: PageMeta?,
-    @Json(name = "data") val data: List<T>?,
+data class PageResponse(
+    @Json(name = "dates")val dates: Date,
+    @Json(name = "page") val currentPage: Int,
+    @Json(name = "results") val results: List<MovieResponse>,
+    @Json(name = "total_pages") val totalPages: Int,
+    @Json(name = "total_results") val totalResults: Long,
 )
 
 @JsonClass(generateAdapter = true)
+data class Date(
+    @Json(name = "maximum")val maximum: String?,
+    @Json(name = "minimum")val minimum: String
+)
+
+
+@JsonClass(generateAdapter = true)
 data class PageMeta(
-    @Json(name = "size") val size: Int?,
     @Json(name = "page") val currentPage: Int?,
     @Json(name = "total_pages") val totalPage: Int?,
-    @Json(name = "total_count") val totalCount: Int?
+    @Json(name = "total_results") val totalResults: Int?
 )
