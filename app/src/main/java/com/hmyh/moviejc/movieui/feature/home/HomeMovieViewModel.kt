@@ -1,9 +1,8 @@
-package com.hmyh.moviejc.movieui.feature
+package com.hmyh.moviejc.movieui.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hmyh.moviejc.appbase.core.ListViewState
-import com.hmyh.moviejc.appbase.core.ObjViewState
 import com.hmyh.moviejc.domain.feature.home.model.Movie
 import com.hmyh.moviejc.domain.feature.home.repository.MovieRepository
 import com.hmyh.moviejc.domain.feature.home.usecase.GetMovieUseCase
@@ -15,7 +14,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieViewModel @Inject constructor(
+class HomeMovieViewModel @Inject constructor(
     private val movieRepository: MovieRepository,
     private val movieUseCase: GetMovieUseCase
 ) : ViewModel() {

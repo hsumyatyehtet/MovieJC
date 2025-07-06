@@ -101,4 +101,8 @@ dependencies {
     implementation(libs.room.paging)
     implementation(libs.paging.runtime)
     ksp(libs.room.compiler)
+
+    //compose grid
+    implementation(libs.compose.foundation)
+    implementation(libs.coil)
 }

@@ -11,7 +11,6 @@ class MovieMapper @Inject constructor(
         return Movie(
             id = item.id,
             originalTitle = item.originalTitle,
-            overview = item.overview,
             popularity = item.popularity,
             posterPath = item.posterPath,
             title = item.title,
