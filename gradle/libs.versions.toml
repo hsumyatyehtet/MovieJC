@@ -20,6 +20,8 @@ chucker = "4.0.0"
 paging3 = "3.3.6"
 coroutineCore = "1.8.1"
 room = "2.6.1"
+composeFoundation = "1.8.3"
+coil = "2.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,6 +66,9 @@ room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+compose-foundation = {group = "androidx.compose.foundation", name = "foundation", version.ref = "composeFoundation"}
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
