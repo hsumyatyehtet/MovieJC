@@ -10,7 +10,8 @@ data class MovieDetail(
     val releaseDate: String,
     val title: String,
     val voteAverage: String,
-    val genreList: List<Any?>
+    val genreList: List<GenreEntity?>,
+    val runtime: Int
 ) {
 
     data class GenreEntity(

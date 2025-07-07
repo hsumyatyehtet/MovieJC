@@ -14,7 +14,8 @@ data class MovieDetailResponse(
     @Json(name = "release_date")val releaseDate: String,
     @Json(name = "title")val title: String,
     @Json(name = "vote_average")val voteAverage: String,
-    @Json(name = "genres")val genreList: List<GenreVO>
+    @Json(name = "genres")val genreList: List<GenreVO>,
+    @Json(name = "runtime")val runtime: Int
 ) {
     @JsonClass(generateAdapter = true)
     data class GenreVO(

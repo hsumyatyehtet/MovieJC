@@ -2,6 +2,8 @@
 
 package com.hmyh.moviejc.movieui.feature.detail
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -48,9 +53,14 @@ import com.hmyh.moviejc.movieui.widget.InfoRow
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hmyh.moviejc.appbase.core.ObjViewState
 import com.hmyh.moviejc.domain.feature.moviedetail.model.MovieDetail
+import com.hmyh.moviejc.movieui.widget.InfoRowDate
+import com.hmyh.moviejc.movieui.widget.InfoRowHour
 import com.hmyh.moviejc.network.extension.API_KEY_DATA
+import com.hmyh.moviejc.network.extension.PHOTO_PATH
 import timber.log.Timber
+import java.nio.file.WatchEvent
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DetailMovie(
     navController: NavController,
@@ -92,7 +102,7 @@ fun DetailMovie(
 
             when (val state = movieDetailState) {
                 is ObjViewState.Success -> {
-                    MovieDetailContent(moviedetail = state.value)
+                    MovieDetailContent(movieDetail = state.value)
                     Timber.i("movieDetail ${state.value.title}")
                 }
                 is ObjViewState.Loading -> {
@@ -111,8 +121,11 @@ fun DetailMovie(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MovieDetailContent(moviedetail: MovieDetail) {
+fun MovieDetailContent(movieDetail: MovieDetail) {
+
+    val fullPosterPath = PHOTO_PATH + movieDetail.posterPath
 
     Column(
         modifier = Modifier
@@ -124,26 +137,26 @@ fun MovieDetailContent(moviedetail: MovieDetail) {
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .size(250.dp)
-                    .padding(top = 4.dp, bottom = 16.dp),
+                    .size(300.dp)
+                    .padding(start = 50.dp, end = 50.dp, bottom = 16.dp),
             shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
         ) {
             Image(
-                painter = painterResource(id= R.drawable.movie),
+                painter = rememberAsyncImagePainter(model = fullPosterPath),
                 contentDescription = "detail",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
         }
 
-        InfoRow(label = "Original Title:", value = "The Old Guard2")
-        InfoRow(label = "Release on:", value = "July 6, 2025")
-        InfoRow(label = "Lasts:", value = "1h 30m")
+        InfoRow(label = "Original Title:", value = movieDetail.originalTitle)
+        InfoRowDate(label = "Release on:", value = movieDetail.releaseDate)
+        InfoRowHour(label = "Lasts:", value = movieDetail.runtime)
 
         Text(
-            text = "Taking place during the events of John Wick: Chapter 3 – Parabellum, Eve Macarro begins her training in the assassin traditions of the Ruska Roma.",
+            text = movieDetail.overView,
             color = Color.Black,
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 14.sp,
@@ -151,26 +164,31 @@ fun MovieDetailContent(moviedetail: MovieDetail) {
             modifier = Modifier.fillMaxWidth().padding(top = 4.dp, bottom = 4.dp)
         )
 
-        Box(
-            modifier = Modifier
-                .padding(top = 8.dp, bottom = 16.dp)
-                .wrapContentSize()
-                .background(
-                    color = Color.DarkGray,
-                    shape = RoundedCornerShape(4.dp)
-                )
-            ,
-            contentAlignment = Alignment.Center
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "Hello",
-                color = Color.White,
-                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Medium
-            )
+            itemsIndexed(movieDetail.genreList) {index,it->
+                Box(
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 16.dp, end = if (index != movieDetail.genreList.lastIndex) 8.dp else 0.dp)
+                        .wrapContentSize()
+                        .background(
+                            color = Color.DarkGray,
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                    ,
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = it?.name.toString(),
+                        color = Color.White,
+                        modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
         }
 
     }
-
 }

@@ -24,7 +24,8 @@ class MovieDetailMapper @Inject constructor()
                     id = it.id,
                     name = it.name
                 )
-            }
+            },
+            runtime = item.runtime
         )
     }
 }
