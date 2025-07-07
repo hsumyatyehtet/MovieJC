@@ -29,6 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.hmyh.moviejc.R
@@ -42,9 +45,24 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.hmyh.moviejc.movieui.widget.InfoRow
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.hmyh.moviejc.appbase.core.ObjViewState
+import com.hmyh.moviejc.domain.feature.moviedetail.model.MovieDetail
+import com.hmyh.moviejc.network.extension.API_KEY_DATA
+import timber.log.Timber
 
 @Composable
-fun DetailMovie(navController: NavController,id: Long) {
+fun DetailMovie(
+    navController: NavController,
+    id: Long,
+    viewModel: MovieDetailViewModel = hiltViewModel()
+) {
+
+    LaunchedEffect(id) {
+        viewModel.getMovieDetail(id, API_KEY_DATA)
+    }
+
+    val movieDetailState by viewModel.movieDetailFlow.collectAsState()
 
     Scaffold(
         topBar = {
@@ -72,16 +90,29 @@ fun DetailMovie(navController: NavController,id: Long) {
             modifier = Modifier.fillMaxSize().padding(paddingValues)
         ) {
 
-            MovieDetailContent(id)
+            when (val state = movieDetailState) {
+                is ObjViewState.Success -> {
+                    MovieDetailContent(moviedetail = state.value)
+                    Timber.i("movieDetail ${state.value.title}")
+                }
+                is ObjViewState.Loading -> {
+
+                }
+                is ObjViewState.Error -> {
+                    Timber.e(state.errorMessage)
+                }
+                else -> {
+
+                }
+            }
 
         }
     }
 
 }
 
-@Preview(showBackground = true)
 @Composable
-fun MovieDetailContent(id: Long?=null) {
+fun MovieDetailContent(moviedetail: MovieDetail) {
 
     Column(
         modifier = Modifier
