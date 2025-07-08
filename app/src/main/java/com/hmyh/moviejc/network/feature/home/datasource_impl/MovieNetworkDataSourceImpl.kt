@@ -17,16 +17,6 @@ class MovieNetworkDataSourceImpl @Inject constructor(
     private val service: HomeService,
     private val movieDataMapper: MovieDataMapper
 ) : MovieNetworkDataSource {
-//    override suspend fun getNowPlayingMovie(apiKey: String): List<MovieEntity> {
-//        val raw = service.loadNowPlayingMovies(apiKey).getBody()
-//
-//        Timber.i("raw ${raw.data}")
-//
-//        return raw.data?.map(movieDataMapper::map).orEmpty()
-//
-//
-//
-//    }
 
     override suspend fun getNowPlayingMovie(apiKey: String): List<MovieEntity> {
         return try {

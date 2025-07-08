@@ -5,8 +5,8 @@ import com.hmyh.moviejc.domain.feature.home.model.Movie
 import com.hmyh.moviejc.domain.mapper.UnidirectionalMap
 import javax.inject.Inject
 
-class MovieMapper @Inject constructor(
-): UnidirectionalMap<MovieEntity,Movie> {
+class MovieMapper @Inject constructor()
+    : UnidirectionalMap<MovieEntity,Movie> {
     override fun map(item: MovieEntity): Movie {
         return Movie(
             id = item.id,

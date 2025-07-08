@@ -18,10 +18,10 @@ fun MovieNavigation(movieList: List<Movie>){
         composable(MovieScreens.HomeMovie.name) {
             HomeMovie(navController,movieList)
         }
-        composable(MovieScreens.DetailMovie.name+"/{movie}",
-            arguments = listOf(navArgument(name = "movie"){type = NavType.StringType})
+        composable(MovieScreens.DetailMovie.name+"/{id}",
+            arguments = listOf(navArgument(name = "id"){type = NavType.LongType})
         ) {backStackEntry->
-            DetailMovie(navController, backStackEntry.arguments?.getString("movie"))
+            DetailMovie(navController, backStackEntry.arguments?.getLong("id")?: 0L)
         }
     }
 }
