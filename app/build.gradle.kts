@@ -105,4 +105,7 @@ dependencies {
     //compose grid
     implementation(libs.compose.foundation)
     implementation(libs.coil)
+
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
 }

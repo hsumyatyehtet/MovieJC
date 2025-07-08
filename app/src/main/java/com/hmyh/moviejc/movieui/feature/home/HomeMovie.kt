@@ -1,6 +1,7 @@
 package com.hmyh.moviejc.movieui.feature.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,11 +36,12 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.hmyh.moviejc.R
 import com.hmyh.moviejc.domain.feature.home.model.Movie
+import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.network.extension.PHOTO_PATH
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeMovie(navController: NavController,movieList: List<Movie>) {
+fun HomeMovie(navController: NavController, movieList: List<Movie>) {
 
     Scaffold(
         topBar = {
@@ -49,7 +51,8 @@ fun HomeMovie(navController: NavController,movieList: List<Movie>) {
 
                     ),
                 title = {
-                    Text(text = "Playing Now",
+                    Text(
+                        text = "Playing Now",
                         style = MaterialTheme.typography.headlineSmall,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
@@ -63,7 +66,7 @@ fun HomeMovie(navController: NavController,movieList: List<Movie>) {
             modifier = Modifier.padding(it),
             color = MaterialTheme.colorScheme.background
         ) {
-            MainContent(navController,movieList)
+            MainContent(navController, movieList)
 
         }
     }
@@ -71,32 +74,43 @@ fun HomeMovie(navController: NavController,movieList: List<Movie>) {
 }
 
 @Composable
-fun TwoColumnGrid(movieList: List<Movie>){
+fun TwoColumnGrid(movieList: List<Movie>,onItemClick: (Long) -> Unit ={}) {
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(movieList) {movie->
-            MoveItem(movie)
+        items(movieList) { movie ->
+            MoveItem(movie, onItemClick = {
+                onItemClick(it)
+            })
         }
     }
 
 }
 
 @Composable
-fun MoveItem(movie: Movie) {
+fun MoveItem(movie: Movie, onItemClick: (Long) -> Unit = {}) {
 
     val fullPosterPath = PHOTO_PATH + movie.posterPath
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 4.dp, bottom = 4.dp)
+            .clickable(onClick = {
+                onItemClick(movie.id)
+            })
+    ) {
         Card(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .size(180.dp),
+                    .size(200.dp),
             shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
@@ -113,11 +127,11 @@ fun MoveItem(movie: Movie) {
 
         Text(
             text = movie.title,
-            modifier = Modifier.padding(top = 12.dp),
+            modifier = Modifier.padding(top = 4.dp),
             style = MaterialTheme.typography.titleSmall,
             color = Color.Black,
             fontWeight = FontWeight.Medium,
-            fontSize =16.sp,
+            fontSize = 16.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -137,12 +151,14 @@ fun PreviewMoveItem() {
         releaseDate = "2025-06-04",
         voteCount = 10
     )
-    MoveItem(movie = sampleMovie)
+    MoveItem(movie = sampleMovie, onItemClick = {})
 }
 
 
 @Composable
-fun MainContent(navController: NavController,movieList: List<Movie>) {
-    TwoColumnGrid(movieList)
+fun MainContent(navController: NavController, movieList: List<Movie>) {
+    TwoColumnGrid(movieList, onItemClick = {
+        navController.navigate(route = MovieScreens.DetailMovie.name+"/$it")
+    })
 
 }
