@@ -3,7 +3,7 @@ package com.hmyh.moviejc.movieui.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hmyh.moviejc.appbase.core.ListViewState
-import com.hmyh.moviejc.domain.feature.home.model.Movie
+import com.hmyh.moviejc.domain.feature.home.model.MovieVO
 import com.hmyh.moviejc.domain.feature.home.repository.MovieRepository
 import com.hmyh.moviejc.domain.feature.home.usecase.GetMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ class HomeMovieViewModel @Inject constructor(
     private val movieUseCase: GetMovieUseCase
 ) : ViewModel() {
 
-    private val _movieListFlow: MutableStateFlow<ListViewState<Movie>> =
+    private val _movieListFlow: MutableStateFlow<ListViewState<MovieVO>> =
         MutableStateFlow(ListViewState.Idle())
     val movieListFlow = _movieListFlow.asStateFlow()
 

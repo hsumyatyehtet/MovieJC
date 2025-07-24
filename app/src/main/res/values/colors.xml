@@ -7,4 +7,16 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="noti_bar_color">#0f1c2b</color>
+    <color name="background_color">#0e1f30</color>
+    <color name="date_txt_color">#007c4a</color>
+    <color name="rating_bg">#e1c019</color>
+    <color name="text_genre_color">#16795a</color>
+
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+
+    <color name="colorTransparent">@android:color/transparent</color>
+
 </resources>
