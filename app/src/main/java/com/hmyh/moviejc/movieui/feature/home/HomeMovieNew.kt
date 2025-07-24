@@ -2,9 +2,12 @@ package com.hmyh.moviejc.movieui.feature.home
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,6 +48,7 @@ import com.hmyh.moviejc.domain.feature.home.model.MovieVO
 import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
+import com.hmyh.moviejc.movieui.widget.MovieTitle
 import com.hmyh.moviejc.network.extension.API_KEY_DATA
 import timber.log.Timber
 
@@ -77,7 +81,8 @@ fun HomeMovieNew(
                     Timber.i("Search icon clicked")
                 }
             )
-        }
+        },
+        containerColor = colorResource(id = R.color.background_color)
     ) {
         Surface(
             modifier = Modifier
@@ -86,17 +91,17 @@ fun HomeMovieNew(
             color = colorResource(id = R.color.background_color)
         ) {
 
-            when (nowPlayingMovieListState) {
-                is ListViewState.Success -> {
-                    val movieList = (nowPlayingMovieListState as ListViewState.Success<MovieVO>).value
-                    MainContent(navController, movieList)
+            Column {
+                when (nowPlayingMovieListState) {
+                    is ListViewState.Success -> {
+                        val movieList = (nowPlayingMovieListState as ListViewState.Success<MovieVO>).value
+                        MainContent(navController, movieList)
+                    }
+                    is ListViewState.Loading -> {}
+                    is ListViewState.Error -> {}
+                    else -> {}
                 }
 
-                is ListViewState.Loading -> {}
-
-                is ListViewState.Error -> {}
-
-                else -> {}
             }
         }
     }
@@ -105,15 +110,25 @@ fun HomeMovieNew(
 @Composable
 fun MainContent(navController: NavController, movieList: List<MovieVO>) {
 
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(space = 12.dp)
-    ) {
-        items(items = movieList) {
-            MovieItem(it, onItemClick = {
-                navController.navigate(route =  MovieScreens.DetailMovie.name+"/$it")
-            })
+    Column(
+        modifier = Modifier.fillMaxWidth()
+            .padding(top = 8.dp)
+    ){
+
+        MovieTitle(title = "Now Playing Movie List") {
+            Timber.i("See All clicked")
         }
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(space = 12.dp)
+        ) {
+            items(items = movieList) {
+                MovieItem(it, onItemClick = {
+                    navController.navigate(route =  MovieScreens.DetailMovie.name+"/$it")
+                })
+            }
+        }
+
     }
 
 }
@@ -138,6 +153,7 @@ fun HomeTopAppBar(
 ) {
 
     TopAppBar(
+        modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = colorResource(id = R.color.background_color)
         ),
@@ -147,7 +163,7 @@ fun HomeTopAppBar(
                 color = Color.White,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 24.sp
             )
 
         },
