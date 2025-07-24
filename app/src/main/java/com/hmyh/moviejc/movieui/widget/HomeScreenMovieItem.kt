@@ -1,6 +1,10 @@
 package com.hmyh.moviejc.movieui.widget
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -32,21 +36,32 @@ import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.network.extension.PHOTO_PATH
 
 @Composable
-fun MovieItem(movie: MovieVO) {
+fun MovieItem(movie: MovieVO,onItemClick: (Long) -> Unit) {
 
     val fullPosterPath = PHOTO_PATH + movie.posterPath
 
     Column(
-        modifier = Modifier.width(150.dp),
-        horizontalAlignment = Alignment.Start
+        modifier = Modifier
+            .width(150.dp)
+            .clickable(
+                onClick = {
+                    onItemClick(movie.id)
+                }
+            ),
+        horizontalAlignment = Alignment.Start,
     ) {
+
 
         Card(
             modifier = Modifier
-                .height(200.dp),
-            shape = RoundedCornerShape(8.dp),
+                .height(220.dp),
+            shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.colorTransparent)),
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+            border = BorderStroke(
+                width = 1.dp,
+                color = colorResource(R.color.textColorSecondary)
+            )
         ) {
 
             Image(
@@ -64,22 +79,11 @@ fun MovieItem(movie: MovieVO) {
 
         }
 
-        Text(
-            text = movie.title,
-            modifier = Modifier.padding(top = 4.dp),
-            style = MaterialTheme.typography.titleSmall,
-            color = Color.White,
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-
     }
 }
 
 @Preview
 @Composable
 fun MovieItemPreview() {
-    MovieItem(movie = movieDummyVO)
+    MovieItem(movie = movieDummyVO, onItemClick = {})
 }

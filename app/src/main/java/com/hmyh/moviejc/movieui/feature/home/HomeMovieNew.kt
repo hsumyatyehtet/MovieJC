@@ -43,6 +43,7 @@ import com.hmyh.moviejc.R
 import com.hmyh.moviejc.appbase.core.ListViewState
 import com.hmyh.moviejc.domain.feature.home.model.MovieVO
 import com.hmyh.moviejc.domain.utils.movieDummyVO
+import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
 import com.hmyh.moviejc.network.extension.API_KEY_DATA
 import timber.log.Timber
@@ -84,6 +85,7 @@ fun HomeMovieNew(
                 .padding(paddingValues = it),
             color = colorResource(id = R.color.background_color)
         ) {
+
             when (nowPlayingMovieListState) {
                 is ListViewState.Success -> {
                     val movieList = (nowPlayingMovieListState as ListViewState.Success<MovieVO>).value
@@ -108,7 +110,9 @@ fun MainContent(navController: NavController, movieList: List<MovieVO>) {
         horizontalArrangement = Arrangement.spacedBy(space = 12.dp)
     ) {
         items(items = movieList) {
-            MovieItem(it)
+            MovieItem(it, onItemClick = {
+                navController.navigate(route =  MovieScreens.DetailMovie.name+"/$it")
+            })
         }
     }
 
@@ -118,7 +122,8 @@ fun MainContent(navController: NavController, movieList: List<MovieVO>) {
 @Composable
 fun MainContentPreview() {
     val sampleMovies = listOf(
-        movieDummyVO,movieDummyVO
+        movieDummyVO,movieDummyVO,movieDummyVO,
+        movieDummyVO
     )
 
     val navController = rememberNavController()

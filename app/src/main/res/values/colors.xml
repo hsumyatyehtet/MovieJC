@@ -17,6 +17,13 @@
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>
 
+    <color name="colorBlueGrey200">#B0BEC5</color>
+    <color name="colorBlueGrey300">#90A4AE</color>
+    <color name="colorBlueGrey400">#78909C</color>
+    <color name="colorBlueGrey500">#607D8B</color>
+    <color name="colorBlueGrey600">#546E7A</color>
+    <color name="colorBlueGrey700">#455A64</color>
+
     <color name="colorTransparent">@android:color/transparent</color>
 
 </resources>
