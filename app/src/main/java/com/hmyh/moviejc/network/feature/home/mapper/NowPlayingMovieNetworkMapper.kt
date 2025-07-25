@@ -1,15 +1,19 @@
 package com.hmyh.moviejc.network.feature.home.mapper
 
-import com.hmyh.moviejc.data.feature.home.model.MovieEntity
+import com.hmyh.moviejc.data.feature.home.model.NowPlayingMovieEntity
 import com.hmyh.moviejc.domain.mapper.UnidirectionalMap
 import com.hmyh.moviejc.network.feature.home.response.MovieResponse
 import javax.inject.Inject
 
-class MovieDataMapper @Inject constructor() :
-    UnidirectionalMap<MovieResponse, MovieEntity> {
+/**
+ * Created by H.M.Y.H on 2025/07/24
+ * map data send to data layer
+ */
+class NowPlayingMovieNetworkMapper @Inject constructor() :
+    UnidirectionalMap<MovieResponse, NowPlayingMovieEntity> {
 
-    override fun map(item: MovieResponse): MovieEntity {
-        return MovieEntity(
+    override fun map(item: MovieResponse): NowPlayingMovieEntity {
+        return NowPlayingMovieEntity(
             id = item.id,
             originalTitle = item.originalTitle,
             overview = item.overview,

@@ -3,9 +3,11 @@ package com.hmyh.moviejc.movieui.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hmyh.moviejc.appbase.core.ListViewState
-import com.hmyh.moviejc.domain.feature.home.model.MovieVO
+import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
+import com.hmyh.moviejc.domain.feature.home.model.PopularMovieVO
 import com.hmyh.moviejc.domain.feature.home.repository.MovieRepository
-import com.hmyh.moviejc.domain.feature.home.usecase.GetMovieUseCase
+import com.hmyh.moviejc.domain.feature.home.usecase.GetNowPlayingMovieUseCase
+import com.hmyh.moviejc.domain.feature.home.usecase.GetPopularMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,15 +17,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeMovieViewModel @Inject constructor(
-    private val movieRepository: MovieRepository,
-    private val movieUseCase: GetMovieUseCase
+    private val movieUseCase: GetNowPlayingMovieUseCase,
+    private val popularMovieUseCase: GetPopularMovieUseCase
 ) : ViewModel() {
 
-    private val _movieListFlow: MutableStateFlow<ListViewState<MovieVO>> =
+    private val _movieListFlow: MutableStateFlow<ListViewState<NowPlayingMovieVO>> =
         MutableStateFlow(ListViewState.Idle())
     val movieListFlow = _movieListFlow.asStateFlow()
 
-    fun getNowPlayingMoviesList(apkKey: String) {
+    private val _popularMovieListFlow: MutableStateFlow<ListViewState<PopularMovieVO>> =
+        MutableStateFlow(ListViewState.Idle())
+    val popularMovieListFlow = _popularMovieListFlow.asStateFlow()
+
+    suspend fun getNowPlayingMoviesList(apkKey: String) {
         _movieListFlow.value = ListViewState.Loading()
         viewModelScope.launch {
             runCatching {
@@ -34,6 +40,18 @@ class HomeMovieViewModel @Inject constructor(
                 // _movieListFlow.value = ListViewState.Error(exception.map(it))
             }
         }
-
     }
+
+    suspend fun getPopularMovieList(apiKey: String){
+        _popularMovieListFlow.value = ListViewState.Loading()
+        viewModelScope.launch {
+            runCatching {
+                val data = popularMovieUseCase.execute(apiKey)
+                _popularMovieListFlow.value = ListViewState.Success(data)
+            }.getOrElse {
+                Timber.e(it)
+            }
+        }
+    }
+
 }

@@ -1,8 +1,8 @@
 package com.hmyh.moviejc.domain.utils
 
-import com.hmyh.moviejc.domain.feature.home.model.MovieVO
+import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 
-var movieDummyVO = MovieVO(
+var movieDummyVO = NowPlayingMovieVO(
     id = 1,
     originalTitle = "Sample Movie",
     popularity = 8.5f,

@@ -1,10 +1,10 @@
 package com.hmyh.moviejc.network.feature.home.datasource_impl
 
-import android.util.Log
 import com.hmyh.moviejc.data.feature.home.datasource.MovieNetworkDataSource
-import com.hmyh.moviejc.data.feature.home.model.MovieEntity
-import com.hmyh.moviejc.network.extension.getBody
-import com.hmyh.moviejc.network.feature.home.mapper.MovieDataMapper
+import com.hmyh.moviejc.network.feature.home.mapper.PopularMovieNetworkMapper
+import com.hmyh.moviejc.data.feature.home.model.NowPlayingMovieEntity
+import com.hmyh.moviejc.data.feature.home.model.PopularMovieEntity
+import com.hmyh.moviejc.network.feature.home.mapper.NowPlayingMovieNetworkMapper
 import com.hmyh.moviejc.network.feature.home.service.HomeService
 import retrofit2.HttpException
 import timber.log.Timber
@@ -15,10 +15,11 @@ import javax.inject.Inject
  */
 class MovieNetworkDataSourceImpl @Inject constructor(
     private val service: HomeService,
-    private val movieDataMapper: MovieDataMapper
+    private val movieDataMapper: NowPlayingMovieNetworkMapper,
+    private val popularMovieEntityMapper: PopularMovieNetworkMapper
 ) : MovieNetworkDataSource {
 
-    override suspend fun getNowPlayingMovie(apiKey: String): List<MovieEntity> {
+    override suspend fun getNowPlayingMovie(apiKey: String): List<NowPlayingMovieEntity> {
         return try {
             val response = service.loadNowPlayingMovies(apiKey)
             if (response.isSuccessful) {
@@ -35,6 +36,11 @@ class MovieNetworkDataSourceImpl @Inject constructor(
             Timber.e("Unexpected error: ${e.message}")
             emptyList()
         }
+    }
+
+    override suspend fun getPopularMovieList(apiKey: String): List<PopularMovieEntity> {
+        val raw = service.loadPopularMovieList(apiKey).body()
+        return raw?.results?.map(popularMovieEntityMapper::map).orEmpty()
     }
 
 }

@@ -4,7 +4,6 @@ import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,7 +43,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hmyh.moviejc.R
 import com.hmyh.moviejc.appbase.core.ListViewState
-import com.hmyh.moviejc.domain.feature.home.model.MovieVO
+import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
@@ -71,6 +70,7 @@ fun HomeMovieNew(
 
     LaunchedEffect(Unit) {
         viewModel.getNowPlayingMoviesList(API_KEY_DATA)
+        viewModel.getPopularMovieList(API_KEY_DATA)
     }
     val nowPlayingMovieListState by viewModel.movieListFlow.collectAsState()
 
@@ -94,7 +94,7 @@ fun HomeMovieNew(
             Column {
                 when (nowPlayingMovieListState) {
                     is ListViewState.Success -> {
-                        val movieList = (nowPlayingMovieListState as ListViewState.Success<MovieVO>).value
+                        val movieList = (nowPlayingMovieListState as ListViewState.Success<NowPlayingMovieVO>).value
                         MainContent(navController, movieList)
                     }
                     is ListViewState.Loading -> {}
@@ -108,7 +108,7 @@ fun HomeMovieNew(
 }
 
 @Composable
-fun MainContent(navController: NavController, movieList: List<MovieVO>) {
+fun MainContent(navController: NavController, movieList: List<NowPlayingMovieVO>) {
 
     Column(
         modifier = Modifier.fillMaxWidth()

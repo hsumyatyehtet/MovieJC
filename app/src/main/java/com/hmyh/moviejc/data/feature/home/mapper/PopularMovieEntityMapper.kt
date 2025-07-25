@@ -1,14 +1,14 @@
 package com.hmyh.moviejc.data.feature.home.mapper
 
-import com.hmyh.moviejc.data.feature.home.model.MovieEntity
-import com.hmyh.moviejc.domain.feature.home.model.MovieVO
+import com.hmyh.moviejc.data.feature.home.model.PopularMovieEntity
+import com.hmyh.moviejc.domain.feature.home.model.PopularMovieVO
 import com.hmyh.moviejc.domain.mapper.UnidirectionalMap
 import javax.inject.Inject
 
-class MovieMapper @Inject constructor()
-    : UnidirectionalMap<MovieEntity,MovieVO> {
-    override fun map(item: MovieEntity): MovieVO {
-        return MovieVO(
+class PopularMovieEntityMapper @Inject constructor() :
+    UnidirectionalMap<PopularMovieEntity, PopularMovieVO> {
+    override fun map(item: PopularMovieEntity): PopularMovieVO {
+        return PopularMovieVO(
             id = item.id,
             originalTitle = item.originalTitle,
             popularity = item.popularity,
