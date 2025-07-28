@@ -34,7 +34,7 @@ fun MovieItem(movie: MovieDisplayable, onItemClick: (Long) -> Unit) {
 
     Column(
         modifier = Modifier
-            .width(150.dp)
+            .width(120.dp)
             .clickable(
                 onClick = {
                     onItemClick(movie.id)
@@ -43,10 +43,9 @@ fun MovieItem(movie: MovieDisplayable, onItemClick: (Long) -> Unit) {
         horizontalAlignment = Alignment.Start,
     ) {
 
-
         Card(
             modifier = Modifier
-                .height(220.dp),
+                .height(180.dp),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.colorTransparent)),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),

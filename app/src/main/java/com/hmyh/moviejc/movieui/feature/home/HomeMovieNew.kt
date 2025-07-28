@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +51,7 @@ import com.hmyh.moviejc.appbase.core.ListViewState
 import com.hmyh.moviejc.domain.feature.common.domain.MovieDisplayable
 import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 import com.hmyh.moviejc.domain.feature.home.model.PopularMovieVO
+import com.hmyh.moviejc.domain.feature.home.model.TopRatedMovieVO
 import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
@@ -73,9 +79,11 @@ fun HomeMovieNew(
     LaunchedEffect(Unit) {
         viewModel.getNowPlayingMoviesList(API_KEY_DATA)
         viewModel.getPopularMovieList(API_KEY_DATA)
+        viewModel.getTopRatedMovieList(API_KEY_DATA)
     }
     val nowPlayingMovieListState by viewModel.movieListFlow.collectAsState()
     val popularMovieListState by viewModel.popularMovieListFlow.collectAsState()
+    val topRatedMovieListState by viewModel.topRatedMovieListFlow.collectAsState()
 
     Scaffold(
         topBar = {
@@ -94,30 +102,67 @@ fun HomeMovieNew(
             color = colorResource(id = R.color.background_color)
         ) {
 
-            Column {
-                when (nowPlayingMovieListState) {
-                    is ListViewState.Success -> {
-                        val movieList = (nowPlayingMovieListState as ListViewState.Success<NowPlayingMovieVO>).value
-                        MainContent(navController, movieList,"Now Playing Movies")
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+
+                item(
+                ) {
+                    when (nowPlayingMovieListState) {
+                        is ListViewState.Success -> {
+                            val movieList =
+                                (nowPlayingMovieListState as ListViewState.Success<NowPlayingMovieVO>).value
+                            MainContent(navController, movieList, "Now Playing Movies")
+                        }
+
+                        is ListViewState.Loading -> {}
+                        is ListViewState.Error -> {}
+                        else -> {}
                     }
-                    is ListViewState.Loading -> {}
-                    is ListViewState.Error -> {}
-                    else -> {}
                 }
 
-                when (popularMovieListState) {
-                    is ListViewState.Success -> {
-                        val movieList = (popularMovieListState as ListViewState.Success<PopularMovieVO>).value
-                        MainContent(navController, movieList,"Popular Movies")
+                item {
+                    when (popularMovieListState) {
+                        is ListViewState.Success -> {
+                            val movieList =
+                                (popularMovieListState as ListViewState.Success<PopularMovieVO>).value
+                            MainContent(navController, movieList, "Popular Movies")
+                        }
+
+                        is ListViewState.Loading -> {
+                            Timber.i("loading")
+                        }
+
+                        is ListViewState.Error -> {
+                            Timber.e("error")
+                        }
+
+                        else -> {
+                            Timber.i("other")
+                        }
                     }
-                    is ListViewState.Loading -> {
-                        Timber.i("loading")
-                    }
-                    is ListViewState.Error -> {
-                        Timber.e("error")
-                    }
-                    else -> {
-                        Timber.i("other")
+                }
+
+                item {
+                    when (topRatedMovieListState) {
+                        is ListViewState.Success -> {
+                            val movieList =
+                                (topRatedMovieListState as ListViewState.Success<TopRatedMovieVO>).value
+                            MainContent(navController, movieList, "Top Rated Movies")
+                        }
+
+                        is ListViewState.Loading -> {
+                            Timber.i("loading")
+                        }
+
+                        is ListViewState.Error -> {
+                            Timber.e("error")
+                        }
+
+                        else -> {
+                            Timber.i("other")
+                        }
                     }
                 }
 
@@ -127,22 +172,22 @@ fun HomeMovieNew(
 }
 
 @Composable
-fun MainContent(navController: NavController, movieList: List<MovieDisplayable>,title: String) {
+fun MainContent(navController: NavController, movieList: List<MovieDisplayable>, title: String) {
 
     Column(
         modifier = Modifier.fillMaxWidth()
-    ){
+    ) {
 
         MovieTitle(title = title) {
             Timber.i("$title clicked")
         }
         LazyRow(
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(space = 12.dp)
         ) {
             items(items = movieList) {
                 MovieItem(it, onItemClick = {
-                    navController.navigate(route =  MovieScreens.DetailMovie.name+"/$it")
+                    navController.navigate(route = MovieScreens.DetailMovie.name + "/$it")
                 })
             }
         }
@@ -155,13 +200,17 @@ fun MainContent(navController: NavController, movieList: List<MovieDisplayable>,
 @Composable
 fun MainContentPreview() {
     val sampleMovies = listOf(
-        movieDummyVO,movieDummyVO,movieDummyVO,
+        movieDummyVO, movieDummyVO, movieDummyVO,
         movieDummyVO
     )
 
     val navController = rememberNavController()
 
-    MainContent(navController = navController, movieList = sampleMovies, title = "Now Playing Movies")
+    MainContent(
+        navController = navController,
+        movieList = sampleMovies,
+        title = "Now Playing Movies"
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -171,7 +220,9 @@ fun HomeTopAppBar(
 ) {
 
     TopAppBar(
-        modifier = Modifier.fillMaxWidth().padding(start = 4.dp, end = 4.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 4.dp, end = 4.dp),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = colorResource(id = R.color.background_color)
         ),
@@ -179,9 +230,10 @@ fun HomeTopAppBar(
             Text(
                 text = "Movie DB",
                 color = Color.White,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 24.sp,
+                fontStyle = FontStyle.Normal
             )
 
         },

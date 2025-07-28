@@ -27,16 +27,15 @@ fun MovieTitle(title: String,onClickSeeAll: ()-> Unit) {
             modifier = Modifier.padding(vertical = 4.dp),
             text = title,
             color = Color.White,
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Bold,
             fontSize = 16.sp
         )
-
         Text(
             modifier = Modifier
                 .clickable{
                     onClickSeeAll()
                 },
-            text = "See All",
+            text = "View All",
             color = Color.White,
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,

@@ -18,4 +18,9 @@ interface HomeService {
         @Query(value = "api_key")apiKey: String
     ): Response<PageResponse>
 
+    @GET(value = "/3/movie/top_rated")
+    suspend fun loadTopRatedMovieList(
+        @Query(value = "api_key")apiKey: String
+    ): Response<PageResponse>
+
 }

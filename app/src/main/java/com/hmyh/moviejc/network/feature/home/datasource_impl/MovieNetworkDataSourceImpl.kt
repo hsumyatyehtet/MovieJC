@@ -4,7 +4,9 @@ import com.hmyh.moviejc.data.feature.home.datasource.MovieNetworkDataSource
 import com.hmyh.moviejc.network.feature.home.mapper.PopularMovieNetworkMapper
 import com.hmyh.moviejc.data.feature.home.model.NowPlayingMovieEntity
 import com.hmyh.moviejc.data.feature.home.model.PopularMovieEntity
+import com.hmyh.moviejc.data.feature.home.model.TopRatedMovieEntity
 import com.hmyh.moviejc.network.feature.home.mapper.NowPlayingMovieNetworkMapper
+import com.hmyh.moviejc.network.feature.home.mapper.TopRatedMovieNetworkMapper
 import com.hmyh.moviejc.network.feature.home.service.HomeService
 import retrofit2.HttpException
 import timber.log.Timber
@@ -15,8 +17,9 @@ import javax.inject.Inject
  */
 class MovieNetworkDataSourceImpl @Inject constructor(
     private val service: HomeService,
-    private val movieDataMapper: NowPlayingMovieNetworkMapper,
-    private val popularMovieEntityMapper: PopularMovieNetworkMapper
+    private val nowPlayingMovieNetworkMapper: NowPlayingMovieNetworkMapper,
+    private val popularMovieNetworkMapper: PopularMovieNetworkMapper,
+    private val topRatedMovieNetworkMapper: TopRatedMovieNetworkMapper
 ) : MovieNetworkDataSource {
 
     override suspend fun getNowPlayingMovie(apiKey: String): List<NowPlayingMovieEntity> {
@@ -24,7 +27,7 @@ class MovieNetworkDataSourceImpl @Inject constructor(
             val response = service.loadNowPlayingMovies(apiKey)
             if (response.isSuccessful) {
                 val pageResponse = response.body()
-                pageResponse?.results?.map(movieDataMapper::map).orEmpty()
+                pageResponse?.results?.map(nowPlayingMovieNetworkMapper::map).orEmpty()
             } else {
                 Timber.e("API error: ${response.code()} - ${response.message()}")
                 emptyList()
@@ -40,7 +43,12 @@ class MovieNetworkDataSourceImpl @Inject constructor(
 
     override suspend fun getPopularMovieList(apiKey: String): List<PopularMovieEntity> {
         val raw = service.loadPopularMovieList(apiKey).body()
-        return raw?.results?.map(popularMovieEntityMapper::map).orEmpty()
+        return raw?.results?.map(popularMovieNetworkMapper::map).orEmpty()
+    }
+
+    override suspend fun getTopRatedMovieList(apiKey: String): List<TopRatedMovieEntity> {
+        val raw = service.loadTopRatedMovieList(apiKey).body()
+        return raw?.results?.map (topRatedMovieNetworkMapper::map).orEmpty()
     }
 
 }
