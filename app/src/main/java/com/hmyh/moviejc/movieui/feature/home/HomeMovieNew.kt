@@ -43,7 +43,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hmyh.moviejc.R
 import com.hmyh.moviejc.appbase.core.ListViewState
+import com.hmyh.moviejc.domain.feature.common.domain.MovieDisplayable
 import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
+import com.hmyh.moviejc.domain.feature.home.model.PopularMovieVO
 import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
@@ -73,6 +75,7 @@ fun HomeMovieNew(
         viewModel.getPopularMovieList(API_KEY_DATA)
     }
     val nowPlayingMovieListState by viewModel.movieListFlow.collectAsState()
+    val popularMovieListState by viewModel.popularMovieListFlow.collectAsState()
 
     Scaffold(
         topBar = {
@@ -95,11 +98,27 @@ fun HomeMovieNew(
                 when (nowPlayingMovieListState) {
                     is ListViewState.Success -> {
                         val movieList = (nowPlayingMovieListState as ListViewState.Success<NowPlayingMovieVO>).value
-                        MainContent(navController, movieList)
+                        MainContent(navController, movieList,"Now Playing Movies")
                     }
                     is ListViewState.Loading -> {}
                     is ListViewState.Error -> {}
                     else -> {}
+                }
+
+                when (popularMovieListState) {
+                    is ListViewState.Success -> {
+                        val movieList = (popularMovieListState as ListViewState.Success<PopularMovieVO>).value
+                        MainContent(navController, movieList,"Popular Movies")
+                    }
+                    is ListViewState.Loading -> {
+                        Timber.i("loading")
+                    }
+                    is ListViewState.Error -> {
+                        Timber.e("error")
+                    }
+                    else -> {
+                        Timber.i("other")
+                    }
                 }
 
             }
@@ -108,15 +127,15 @@ fun HomeMovieNew(
 }
 
 @Composable
-fun MainContent(navController: NavController, movieList: List<NowPlayingMovieVO>) {
+fun MainContent(navController: NavController, movieList: List<MovieDisplayable>,title: String) {
 
     Column(
         modifier = Modifier.fillMaxWidth()
             .padding(top = 8.dp)
     ){
 
-        MovieTitle(title = "Now Playing Movie List") {
-            Timber.i("See All clicked")
+        MovieTitle(title = title) {
+            Timber.i("$title clicked")
         }
         LazyRow(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
@@ -143,7 +162,7 @@ fun MainContentPreview() {
 
     val navController = rememberNavController()
 
-    MainContent(navController = navController, movieList = sampleMovies)
+    MainContent(navController = navController, movieList = sampleMovies, title = "Now Playing Movies")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

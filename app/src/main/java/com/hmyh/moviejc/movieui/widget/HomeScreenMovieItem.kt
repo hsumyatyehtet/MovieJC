@@ -22,12 +22,13 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.hmyh.moviejc.R
+import com.hmyh.moviejc.domain.feature.common.domain.MovieDisplayable
 import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.network.extension.PHOTO_PATH
 
 @Composable
-fun MovieItem(movie: NowPlayingMovieVO, onItemClick: (Long) -> Unit) {
+fun MovieItem(movie: MovieDisplayable, onItemClick: (Long) -> Unit) {
 
     val fullPosterPath = PHOTO_PATH + movie.posterPath
 
