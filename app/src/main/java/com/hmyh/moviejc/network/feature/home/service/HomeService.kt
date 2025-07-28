@@ -23,4 +23,9 @@ interface HomeService {
         @Query(value = "api_key")apiKey: String
     ): Response<PageResponse>
 
+    @GET(value = "/3/movie/upcoming")
+    suspend fun loadUpcomingMovieList(
+        @Query(value = "api_key")apiKey: String
+    ): Response<PageResponse>
+
 }

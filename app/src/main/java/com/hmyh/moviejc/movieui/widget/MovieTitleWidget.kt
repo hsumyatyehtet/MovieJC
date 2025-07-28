@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 fun MovieTitle(title: String,onClickSeeAll: ()-> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp, top = 4.dp),
+            .padding(start = 20.dp, end = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

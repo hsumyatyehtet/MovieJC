@@ -6,10 +6,12 @@ import com.hmyh.moviejc.appbase.core.ListViewState
 import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 import com.hmyh.moviejc.domain.feature.home.model.PopularMovieVO
 import com.hmyh.moviejc.domain.feature.home.model.TopRatedMovieVO
+import com.hmyh.moviejc.domain.feature.home.model.UpcomingMovieVO
 import com.hmyh.moviejc.domain.feature.home.repository.MovieRepository
 import com.hmyh.moviejc.domain.feature.home.usecase.GetNowPlayingMovieUseCase
 import com.hmyh.moviejc.domain.feature.home.usecase.GetPopularMovieUseCase
 import com.hmyh.moviejc.domain.feature.home.usecase.GetTopRatedMovieUseCase
+import com.hmyh.moviejc.domain.feature.home.usecase.GetUpcomingMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +23,8 @@ import javax.inject.Inject
 class HomeMovieViewModel @Inject constructor(
     private val movieUseCase: GetNowPlayingMovieUseCase,
     private val popularMovieUseCase: GetPopularMovieUseCase,
-    private val topRatedMovieUseCase: GetTopRatedMovieUseCase
+    private val topRatedMovieUseCase: GetTopRatedMovieUseCase,
+    private val upComingMovieUseCase: GetUpcomingMovieUseCase
 ) : ViewModel() {
 
     private val _movieListFlow: MutableStateFlow<ListViewState<NowPlayingMovieVO>> =
@@ -35,6 +38,10 @@ class HomeMovieViewModel @Inject constructor(
     private val _topRatedMovieListFlow: MutableStateFlow<ListViewState<TopRatedMovieVO>> =
         MutableStateFlow(ListViewState.Idle())
     val topRatedMovieListFlow = _topRatedMovieListFlow.asStateFlow()
+
+    private val _upComingMovieListFlow: MutableStateFlow<ListViewState<UpcomingMovieVO>> =
+        MutableStateFlow(ListViewState.Idle())
+    val upComingMovieListFlow = _upComingMovieListFlow.asStateFlow()
 
     suspend fun getNowPlayingMoviesList(apkKey: String) {
         _movieListFlow.value = ListViewState.Loading()
@@ -67,6 +74,18 @@ class HomeMovieViewModel @Inject constructor(
             runCatching {
                 val data = topRatedMovieUseCase.execute(apiKey)
                 _topRatedMovieListFlow.value = ListViewState.Success(data)
+            }.getOrElse {
+                Timber.e(it)
+            }
+        }
+    }
+
+    suspend fun getUpcomingMovieList(apiKey: String){
+        _upComingMovieListFlow.value = ListViewState.Loading()
+        viewModelScope.launch {
+            runCatching {
+                val data = upComingMovieUseCase.execute(apiKey)
+                _upComingMovieListFlow.value = ListViewState.Success(data)
             }.getOrElse {
                 Timber.e(it)
             }

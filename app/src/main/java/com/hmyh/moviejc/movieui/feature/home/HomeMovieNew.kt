@@ -52,6 +52,7 @@ import com.hmyh.moviejc.domain.feature.common.domain.MovieDisplayable
 import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 import com.hmyh.moviejc.domain.feature.home.model.PopularMovieVO
 import com.hmyh.moviejc.domain.feature.home.model.TopRatedMovieVO
+import com.hmyh.moviejc.domain.feature.home.model.UpcomingMovieVO
 import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
@@ -80,10 +81,12 @@ fun HomeMovieNew(
         viewModel.getNowPlayingMoviesList(API_KEY_DATA)
         viewModel.getPopularMovieList(API_KEY_DATA)
         viewModel.getTopRatedMovieList(API_KEY_DATA)
+        viewModel.getUpcomingMovieList(API_KEY_DATA)
     }
     val nowPlayingMovieListState by viewModel.movieListFlow.collectAsState()
     val popularMovieListState by viewModel.popularMovieListFlow.collectAsState()
     val topRatedMovieListState by viewModel.topRatedMovieListFlow.collectAsState()
+    val upComingMovieListState by viewModel.upComingMovieListFlow.collectAsState()
 
     Scaffold(
         topBar = {
@@ -166,6 +169,28 @@ fun HomeMovieNew(
                     }
                 }
 
+                item {
+                    when (upComingMovieListState) {
+                        is ListViewState.Success -> {
+                            val movieList =
+                                (upComingMovieListState as ListViewState.Success<UpcomingMovieVO>).value
+                            MainContent(navController, movieList, "UpComing Movies")
+                        }
+
+                        is ListViewState.Loading -> {
+                            Timber.i("loading")
+                        }
+
+                        is ListViewState.Error -> {
+                            Timber.e("error")
+                        }
+
+                        else -> {
+                            Timber.i("other")
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -182,6 +207,7 @@ fun MainContent(navController: NavController, movieList: List<MovieDisplayable>,
             Timber.i("$title clicked")
         }
         LazyRow(
+            modifier = Modifier.padding(bottom = 8.dp),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(space = 12.dp)
         ) {

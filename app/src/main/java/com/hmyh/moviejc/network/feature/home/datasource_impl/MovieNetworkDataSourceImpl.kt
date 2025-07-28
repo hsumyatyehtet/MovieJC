@@ -5,8 +5,10 @@ import com.hmyh.moviejc.network.feature.home.mapper.PopularMovieNetworkMapper
 import com.hmyh.moviejc.data.feature.home.model.NowPlayingMovieEntity
 import com.hmyh.moviejc.data.feature.home.model.PopularMovieEntity
 import com.hmyh.moviejc.data.feature.home.model.TopRatedMovieEntity
+import com.hmyh.moviejc.data.feature.home.model.UpcomingMovieEntity
 import com.hmyh.moviejc.network.feature.home.mapper.NowPlayingMovieNetworkMapper
 import com.hmyh.moviejc.network.feature.home.mapper.TopRatedMovieNetworkMapper
+import com.hmyh.moviejc.network.feature.home.mapper.UpcomingMovieNetworkMapper
 import com.hmyh.moviejc.network.feature.home.service.HomeService
 import retrofit2.HttpException
 import timber.log.Timber
@@ -19,7 +21,8 @@ class MovieNetworkDataSourceImpl @Inject constructor(
     private val service: HomeService,
     private val nowPlayingMovieNetworkMapper: NowPlayingMovieNetworkMapper,
     private val popularMovieNetworkMapper: PopularMovieNetworkMapper,
-    private val topRatedMovieNetworkMapper: TopRatedMovieNetworkMapper
+    private val topRatedMovieNetworkMapper: TopRatedMovieNetworkMapper,
+    private val upComingMovieNetworkMapper: UpcomingMovieNetworkMapper
 ) : MovieNetworkDataSource {
 
     override suspend fun getNowPlayingMovie(apiKey: String): List<NowPlayingMovieEntity> {
@@ -49,6 +52,11 @@ class MovieNetworkDataSourceImpl @Inject constructor(
     override suspend fun getTopRatedMovieList(apiKey: String): List<TopRatedMovieEntity> {
         val raw = service.loadTopRatedMovieList(apiKey).body()
         return raw?.results?.map (topRatedMovieNetworkMapper::map).orEmpty()
+    }
+
+    override suspend fun getUpcomingMovieList(apiKey: String): List<UpcomingMovieEntity> {
+        val raw = service.loadUpcomingMovieList(apiKey).body()
+        return raw?.results?.map(upComingMovieNetworkMapper::map).orEmpty()
     }
 
 }
