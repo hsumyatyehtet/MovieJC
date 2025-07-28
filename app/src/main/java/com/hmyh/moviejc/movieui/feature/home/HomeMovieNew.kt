@@ -131,7 +131,6 @@ fun MainContent(navController: NavController, movieList: List<MovieDisplayable>,
 
     Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(top = 8.dp)
     ){
 
         MovieTitle(title = title) {
