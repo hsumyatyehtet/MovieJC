@@ -3,6 +3,10 @@ package com.hmyh.moviejc.network.feature.home.response
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+/**
+ * Created by H.M.Y.H on 2025/07/24
+ * network response data to send to data layer
+ */
 @JsonClass(generateAdapter = true)
 data class MovieResponse(
     @Json(name = "id") val id: Long,

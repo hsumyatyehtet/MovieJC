@@ -22,7 +22,7 @@ data class DataEmptyResponse(
 
 @JsonClass(generateAdapter = true)
 data class PageResponse(
-    @Json(name = "dates")val dates: Date,
+    @Json(name = "dates")val dates: Date?=null,
     @Json(name = "page") val currentPage: Int,
     @Json(name = "results") val results: List<MovieResponse>,
     @Json(name = "total_pages") val totalPages: Int,

@@ -1,6 +1,5 @@
 package com.hmyh.moviejc.data.feature.moviedetail.mapper
 
-import com.hmyh.moviejc.data.feature.home.model.MovieEntity
 import com.hmyh.moviejc.data.feature.moviedetail.model.MovieDetailEntity
 import com.hmyh.moviejc.domain.feature.moviedetail.model.MovieDetail
 import com.hmyh.moviejc.domain.mapper.UnidirectionalMap

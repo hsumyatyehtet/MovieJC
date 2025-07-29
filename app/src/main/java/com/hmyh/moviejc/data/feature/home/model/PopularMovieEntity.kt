@@ -1,6 +1,10 @@
 package com.hmyh.moviejc.data.feature.home.model
 
-data class MovieEntity(
+/**
+ * Created by H.M.Y.H on 2025/07/24
+ * get data from network and mapping data send to domain layer
+ */
+data class PopularMovieEntity(
     val id: Long,
     val originalTitle: String,
     val overview: String,

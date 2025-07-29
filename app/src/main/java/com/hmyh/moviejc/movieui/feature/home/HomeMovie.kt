@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,15 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import com.hmyh.moviejc.R
-import com.hmyh.moviejc.domain.feature.home.model.Movie
+import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.network.extension.PHOTO_PATH
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeMovie(navController: NavController, movieList: List<Movie>) {
+fun HomeMovie(navController: NavController, movieList: List<NowPlayingMovieVO>) {
 
     Scaffold(
         topBar = {
@@ -66,7 +63,7 @@ fun HomeMovie(navController: NavController, movieList: List<Movie>) {
             modifier = Modifier.padding(it),
             color = MaterialTheme.colorScheme.background
         ) {
-            MainContent(navController, movieList)
+            MainContents(navController, movieList)
 
         }
     }
@@ -74,7 +71,7 @@ fun HomeMovie(navController: NavController, movieList: List<Movie>) {
 }
 
 @Composable
-fun TwoColumnGrid(movieList: List<Movie>,onItemClick: (Long) -> Unit ={}) {
+fun TwoColumnGrid(movieList: List<NowPlayingMovieVO>, onItemClick: (Long) -> Unit ={}) {
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -94,7 +91,7 @@ fun TwoColumnGrid(movieList: List<Movie>,onItemClick: (Long) -> Unit ={}) {
 }
 
 @Composable
-fun MoveItem(movie: Movie, onItemClick: (Long) -> Unit = {}) {
+fun MoveItem(movie: NowPlayingMovieVO, onItemClick: (Long) -> Unit = {}) {
 
     val fullPosterPath = PHOTO_PATH + movie.posterPath
 
@@ -142,7 +139,7 @@ fun MoveItem(movie: Movie, onItemClick: (Long) -> Unit = {}) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMoveItem() {
-    val sampleMovie = Movie(
+    val sampleMovie = NowPlayingMovieVO(
         id = 1,
         originalTitle = "Sample Movie",
         title = "Ballerina",
@@ -156,7 +153,7 @@ fun PreviewMoveItem() {
 
 
 @Composable
-fun MainContent(navController: NavController, movieList: List<Movie>) {
+fun MainContents(navController: NavController, movieList: List<NowPlayingMovieVO>) {
     TwoColumnGrid(movieList, onItemClick = {
         navController.navigate(route = MovieScreens.DetailMovie.name+"/$it")
     })
