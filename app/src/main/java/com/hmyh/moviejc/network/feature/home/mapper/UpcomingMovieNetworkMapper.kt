@@ -1,15 +1,14 @@
 package com.hmyh.moviejc.network.feature.home.mapper
 
-import com.hmyh.moviejc.data.feature.home.model.MovieEntity
+import com.hmyh.moviejc.data.feature.home.model.UpcomingMovieEntity
 import com.hmyh.moviejc.domain.mapper.UnidirectionalMap
 import com.hmyh.moviejc.network.feature.home.response.MovieResponse
 import javax.inject.Inject
 
-class MovieDataMapper @Inject constructor() :
-    UnidirectionalMap<MovieResponse, MovieEntity> {
-
-    override fun map(item: MovieResponse): MovieEntity {
-        return MovieEntity(
+class UpcomingMovieNetworkMapper @Inject constructor() :
+UnidirectionalMap<MovieResponse, UpcomingMovieEntity>{
+    override fun map(item: MovieResponse): UpcomingMovieEntity {
+        return UpcomingMovieEntity(
             id = item.id,
             originalTitle = item.originalTitle,
             overview = item.overview,
@@ -20,5 +19,4 @@ class MovieDataMapper @Inject constructor() :
             voteCount = item.voteCount
         )
     }
-
 }
