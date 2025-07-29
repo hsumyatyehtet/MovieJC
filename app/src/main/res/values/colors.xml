@@ -25,5 +25,6 @@
     <color name="colorBlueGrey700">#455A64</color>
 
     <color name="colorTransparent">@android:color/transparent</color>
+    <color name="colorMovieDetailTransparent">#900e1f30</color>
 
 </resources>

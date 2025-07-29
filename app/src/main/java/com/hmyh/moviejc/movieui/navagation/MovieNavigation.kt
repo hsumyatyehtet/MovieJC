@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hmyh.moviejc.movieui.feature.detail.DetailMovie
+import com.hmyh.moviejc.movieui.feature.detail.MovieDetailNew
 import com.hmyh.moviejc.movieui.feature.home.HomeMovieNew
 
 @Composable
@@ -23,7 +24,8 @@ fun MovieNavigation(){
             arguments = listOf(navArgument(name = "id"){type = NavType.LongType})
         ) {backStackEntry->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                DetailMovie(navController, backStackEntry.arguments?.getLong("id")?: 0L)
+//                DetailMovie(navController, backStackEntry.arguments?.getLong("id")?: 0L)
+                MovieDetailNew(navController, backStackEntry.arguments?.getLong("id")?: 0L)
             }
         }
     }
