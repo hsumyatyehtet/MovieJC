@@ -4,21 +4,30 @@ package com.hmyh.moviejc.movieui.feature.detail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import com.hmyh.moviejc.R
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,8 +49,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -69,14 +80,19 @@ fun MovieDetailNew(
 
     val movieDetailState by viewModel.movieDetailFlow.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.background_color))
+
+    ) {
         // 1. Background Image (bottom-most layer)
 
         when (val state = movieDetailState) {
             is ObjViewState.Success -> {
 
-                MovieDetailToolbar(state.value.backDropPack,navController)
-                MainLayout(state.value,navController)
+                MovieDetailToolbar(state.value.backDropPack, navController)
+                MainLayout(state.value, navController)
 
                 Timber.i("movieDetail ${state.value.title}")
             }
@@ -110,27 +126,142 @@ fun MainLayout(movieDetail: MovieDetail, navController: NavController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 250.dp)
+                    .padding(top = 130.dp)
                     .padding(horizontal = 16.dp)
             ) {
+
+                DetailCard()
+
+
                 Text(
                     text = "Movie Title",
                     style = MaterialTheme.typography.headlineMedium,
-                    color = Color.Black
+                    color = Color.White
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "This is a long scrollable description. ".repeat(50),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black
+                    color = Color.White
                 )
             }
         }
     }
 }
 
+
 @Composable
-fun MovieDetailToolbar(posterPath: String,navController: NavController) {
+fun DetailCard() {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .height(IntrinsicSize.Min)
+
+    ) {
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            shape = RoundedCornerShape(8.dp),
+            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.white))
+        ) {
+
+        }
+
+        Column (
+            modifier = Modifier
+                .padding(start = 20.dp, top = 0.dp, end = 20.dp)
+                .align(Alignment.TopStart)
+
+        ){
+            Row(
+                modifier = Modifier.offset(y = (-30).dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Card(
+                    modifier = Modifier
+                        .width(120.dp)
+                        .height(180.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.background_color)),
+                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+                ){
+
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column {
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 40.dp),
+                        text = "Movie Title",
+                        color = colorResource(id = R.color.textColorPrimary),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 8.dp, end = 20.dp),
+                        text = "2025",
+                        color = colorResource(id = R.color.textColorPrimary),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
+
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(bottom = 20.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp)
+                        .background(colorResource(id = R.color.background_color))
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(60.dp)
+                        .background(colorResource(id = R.color.background_color))
+                )
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .padding(end = 20.dp)
+                .offset(y = (-30).dp)
+                .width(60.dp)
+                .height(60.dp)
+                .align(Alignment.TopEnd),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.rating_bg)),
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+        ){
+
+        }
+
+
+
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DetailCardPreview() {
+    DetailCard()
+}
+
+@Composable
+fun MovieDetailToolbar(posterPath: String, navController: NavController) {
 
     val fullPosterPath = PHOTO_PATH + posterPath
 
@@ -159,7 +290,6 @@ fun MovieDetailToolbar(posterPath: String,navController: NavController) {
                         )
                     )
                 )
-
         )
 
         // 3. TopAppBar (top-most layer)
@@ -176,9 +306,11 @@ fun MovieDetailToolbar(posterPath: String,navController: NavController) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
-                    modifier = Modifier.padding(8.dp).clickable {
-                        navController.popBackStack()
-                    },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            navController.popBackStack()
+                        },
                     tint = Color.White
                 )
             }
@@ -189,7 +321,16 @@ fun MovieDetailToolbar(posterPath: String,navController: NavController) {
 
 @Preview(showBackground = true)
 @Composable
-fun ToolBarPreview(){
-    MovieDetailToolbar(posterPath = movieDetailVO.posterPath, navController = rememberNavController())
+fun ToolBarPreview() {
+    MovieDetailToolbar(
+        posterPath = movieDetailVO.posterPath,
+        navController = rememberNavController()
+    )
+}
+
+@Preview(backgroundColor = 0x0e1f30, showBackground = true)
+@Composable
+fun MainLayoutPreview() {
+    MainLayout(movieDetail = movieDetailVO, navController = rememberNavController())
 }
 
