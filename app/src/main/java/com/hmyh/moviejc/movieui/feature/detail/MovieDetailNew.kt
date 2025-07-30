@@ -28,6 +28,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -192,14 +194,26 @@ private fun ActionButtons() {
     ) {
         RoundedButton(
             modifier = Modifier.weight(1f),
-            backgroundColor = R.color.colorPlayButtonBackground
+            backgroundColor = R.color.colorPlayButtonBackground,
+            imageVector = Icons.Default.PlayArrow,
+            imageColor = Color.White,
+            title = "Play",
+            onActionButton = {
+                Timber.i("clicked Play button")
+            }
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
         RoundedButton(
             modifier = Modifier.weight(1f),
-            backgroundColor = R.color.white
+            backgroundColor = R.color.white,
+            imageVector = Icons.Default.Home,
+            imageColor = Color.Black,
+            title = "Home",
+            onActionButton = {
+                Timber.i("clicked Home button")
+            }
         )
     }
 }

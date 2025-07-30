@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -19,11 +20,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +42,7 @@ import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -193,7 +197,7 @@ fun FormattedDateText(date: String): String {
 @Preview(showBackground = true)
 @Composable
 fun RatingCardPreview() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         RatingCard(voteAverage = "8.5")
     }
 }
@@ -230,15 +234,67 @@ fun PosterItem(posterPath: String?=null) {
 }
 
 @Composable
-fun RowScope.RoundedButton(modifier: Modifier,backgroundColor: Int) {
+fun RowScope.RoundedButton(
+    modifier: Modifier,
+    backgroundColor: Int,
+    imageVector: ImageVector,
+    imageColor: Color,
+    title: String,
+    onActionButton: () -> Unit
+) {
     Card(
         modifier = modifier
             .weight(1f)
-            .height(50.dp),
+            .height(45.dp),
         shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(id = backgroundColor)),
-        elevation = CardDefaults.elevatedCardElevation(4.dp)
+        elevation = CardDefaults.elevatedCardElevation(4.dp),
+        onClick = {
+            onActionButton.invoke()
+        }
     ) {
 
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Icon(
+                modifier = Modifier.size(24.dp),
+                imageVector = imageVector,
+                contentDescription = "Play",
+                tint = imageColor
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = title,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                color = imageColor
+            )
+
+        }
+
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RoundedButtonPreview(){
+    Row (modifier = Modifier.fillMaxWidth()) {
+        RoundedButton(
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = R.color.colorPlayButtonBackground,
+            imageVector = Icons.Default.PlayArrow,
+            imageColor = Color.White,
+            title = "Play",
+            onActionButton = {
+
+            }
+        )
     }
 }
