@@ -13,6 +13,7 @@
     <color name="date_txt_color">#007c4a</color>
     <color name="rating_bg">#e1c019</color>
     <color name="text_genre_color">#16795a</color>
+    <color name="colorPlayButtonBackground">#00cd72</color>
 
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>

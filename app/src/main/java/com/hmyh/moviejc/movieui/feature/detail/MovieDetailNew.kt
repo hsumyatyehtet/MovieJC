@@ -9,9 +9,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import com.hmyh.moviejc.R
@@ -61,6 +63,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.hmyh.moviejc.appbase.core.ObjViewState
 import com.hmyh.moviejc.domain.feature.moviedetail.model.MovieDetail
 import com.hmyh.moviejc.domain.utils.movieDetailVO
+import com.hmyh.moviejc.movieui.widget.CardWhiteBackground
+import com.hmyh.moviejc.movieui.widget.FormattedDateText
+import com.hmyh.moviejc.movieui.widget.MovieDetailToolbar
+import com.hmyh.moviejc.movieui.widget.PosterItem
+import com.hmyh.moviejc.movieui.widget.RatingCard
+import com.hmyh.moviejc.movieui.widget.RoundedButton
 import com.hmyh.moviejc.network.extension.API_KEY_DATA
 import com.hmyh.moviejc.network.extension.PHOTO_PATH
 import timber.log.Timber
@@ -86,7 +94,6 @@ fun MovieDetailNew(
             .background(colorResource(id = R.color.background_color))
 
     ) {
-        // 1. Background Image (bottom-most layer)
 
         when (val state = movieDetailState) {
             is ObjViewState.Success -> {
@@ -115,6 +122,7 @@ fun MovieDetailNew(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainLayout(movieDetail: MovieDetail, navController: NavController) {
     LazyColumn(
@@ -130,7 +138,7 @@ fun MainLayout(movieDetail: MovieDetail, navController: NavController) {
                     .padding(horizontal = 16.dp)
             ) {
 
-                DetailCard()
+                DetailCard(movieDetail,navController)
 
 
                 Text(
@@ -150,23 +158,17 @@ fun MainLayout(movieDetail: MovieDetail, navController: NavController) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DetailCard() {
+fun DetailCard(movieDetail: MovieDetail, navController: NavController) {
     Box(
         modifier = Modifier.fillMaxWidth()
             .height(IntrinsicSize.Min)
 
     ) {
 
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-            shape = RoundedCornerShape(8.dp),
-            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.white))
-        ) {
-
-        }
+        CardWhiteBackground()
+        RatingCard(voteAverage = movieDetail.voteAverage)
 
         Column (
             modifier = Modifier
@@ -174,163 +176,84 @@ fun DetailCard() {
                 .align(Alignment.TopStart)
 
         ){
-            Row(
-                modifier = Modifier.offset(y = (-30).dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Card(
-                    modifier = Modifier
-                        .width(120.dp)
-                        .height(180.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.background_color)),
-                    elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
-                ){
-
-                }
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column {
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 40.dp),
-                        text = "Movie Title",
-                        color = colorResource(id = R.color.textColorPrimary),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 8.dp, end = 20.dp),
-                        text = "2025",
-                        color = colorResource(id = R.color.textColorPrimary),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-                }
-
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(bottom = 20.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(60.dp)
-                        .background(colorResource(id = R.color.background_color))
-                )
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(60.dp)
-                        .background(colorResource(id = R.color.background_color))
-                )
-            }
+            MovieDetailHeader(movieDetail)
+            ActionButtons()
         }
-
-        Card(
-            modifier = Modifier
-                .padding(end = 20.dp)
-                .offset(y = (-30).dp)
-                .width(60.dp)
-                .height(60.dp)
-                .align(Alignment.TopEnd),
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.rating_bg)),
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
-        ){
-
-        }
-
-
 
     }
 }
 
+@Composable
+private fun ActionButtons() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 20.dp)
+    ) {
+        RoundedButton(
+            modifier = Modifier.weight(1f),
+            backgroundColor = R.color.colorPlayButtonBackground
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        RoundedButton(
+            modifier = Modifier.weight(1f),
+            backgroundColor = R.color.white
+        )
+    }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+private fun MovieDetailHeader(movieDetail: MovieDetail) {
+    Row(
+        modifier = Modifier.offset(y = (-30).dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        PosterItem(movieDetail.posterPath)
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        val date = FormattedDateText(movieDetail.releaseDate)
+
+        Column {
+            Text(
+                modifier = Modifier
+                    .padding(top = 40.dp),
+                text = movieDetail.title,
+                color = colorResource(id = R.color.textColorPrimary),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                modifier = Modifier
+                    .padding(top = 8.dp, end = 20.dp),
+                text = date,
+                color = colorResource(id = R.color.textColorPrimary),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W500
+            )
+        }
+
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun DetailCardPreview() {
-    DetailCard()
+    DetailCard(movieDetail = movieDetailVO, navController = rememberNavController())
 }
 
-@Composable
-fun MovieDetailToolbar(posterPath: String, navController: NavController) {
-
-    val fullPosterPath = PHOTO_PATH + posterPath
-
-    Box {
-        Image(
-            painter = rememberAsyncImagePainter(model = fullPosterPath),
-            contentDescription = "detail",
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .align(Alignment.Center)
-        )
-
-        // 2. Gradient Overlay (middle layer)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .shadow(elevation = 2.dp)
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            colorResource(R.color.colorMovieDetailTransparent),
-                            Color.Transparent
-                        )
-                    )
-                )
-        )
-
-        // 3. TopAppBar (top-most layer)
-        TopAppBar(
-            title = { Text("") },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                titleContentColor = Color.White
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding(),
-            navigationIcon = {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .clickable {
-                            navController.popBackStack()
-                        },
-                    tint = Color.White
-                )
-            }
-        )
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ToolBarPreview() {
-    MovieDetailToolbar(
-        posterPath = movieDetailVO.posterPath,
-        navController = rememberNavController()
-    )
-}
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(backgroundColor = 0x0e1f30, showBackground = true)
 @Composable
 fun MainLayoutPreview() {
-    MainLayout(movieDetail = movieDetailVO, navController = rememberNavController())
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        MainLayout(movieDetail = movieDetailVO, navController = rememberNavController())
+    }
 }
 
