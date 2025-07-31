@@ -88,8 +88,10 @@ fun MovieDetailToolbar(posterPath: String, navController: NavController) {
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            colorResource(R.color.colorMovieDetailTransparent),
-                            Color.Transparent
+                            Color(0xFF0e1f30),
+                            Color(0xCC0e1f30),
+                            Color(0x990e1f30),
+                            Color(0x660e1f30)            
                         )
                     )
                 )

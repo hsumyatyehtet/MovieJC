@@ -27,5 +27,7 @@
 
     <color name="colorTransparent">@android:color/transparent</color>
     <color name="colorMovieDetailTransparent">#900e1f30</color>
+    <color name="colorMovieDetailTransparent2">#600e1f30</color>
+    <color name="colorGenreBackground">#2C3E50</color>
 
 </resources>

@@ -4,55 +4,41 @@ package com.hmyh.moviejc.movieui.feature.detail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import com.hmyh.moviejc.R
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,8 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.hmyh.moviejc.appbase.core.ObjViewState
 import com.hmyh.moviejc.domain.feature.moviedetail.model.MovieDetail
 import com.hmyh.moviejc.domain.utils.movieDetailVO
@@ -72,7 +56,6 @@ import com.hmyh.moviejc.movieui.widget.PosterItem
 import com.hmyh.moviejc.movieui.widget.RatingCard
 import com.hmyh.moviejc.movieui.widget.RoundedButton
 import com.hmyh.moviejc.network.extension.API_KEY_DATA
-import com.hmyh.moviejc.network.extension.PHOTO_PATH
 import timber.log.Timber
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -144,15 +127,56 @@ fun MainLayout(movieDetail: MovieDetail, navController: NavController) {
 
 
                 Text(
-                    text = "Movie Title",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = Color.White
+                    text = movieDetail.originalTitle,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
+                GenreList(movieDetail)
+
                 Text(
-                    text = "This is a long scrollable description. ".repeat(50),
+                    text = movieDetail.overView,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White
+                    color = Color.White,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun GenreList(movieDetail: MovieDetail) {
+    LazyRow(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        itemsIndexed(movieDetail.genreList) { index, it ->
+            Card (
+                modifier = Modifier
+                    .padding(
+                        top = 8.dp,
+                        bottom = 16.dp,
+                        end = if (index != movieDetail.genreList.lastIndex) 8.dp else 0.dp
+                    )
+                    .wrapContentSize(),
+                colors = CardDefaults.cardColors(colorResource(id = R.color.colorGenreBackground)),
+                shape = RoundedCornerShape(8.dp),
+                elevation = CardDefaults.elevatedCardElevation(8.dp)
+            ) {
+                Text(
+                    text = it?.name.toString(),
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Light,
+                    fontStyle = FontStyle.Italic
                 )
             }
         }
