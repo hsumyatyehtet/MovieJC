@@ -5,6 +5,7 @@ data class MovieDetailEntity(
     val backDropPack: String,
     val originalTitle: String,
     val homePage: String,
+    val originalCountry: List<String>,
     val overView: String,
     val posterPath: String,
     val releaseDate: String,

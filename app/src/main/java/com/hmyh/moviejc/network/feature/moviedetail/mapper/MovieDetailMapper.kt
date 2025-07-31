@@ -14,6 +14,7 @@ class MovieDetailMapper @Inject constructor() :
             backDropPack = item.backDropPack,
             originalTitle = item.originalTitle,
             homePage = item.homePage,
+            originalCountry = item.originalCountry,
             overView = item.overView,
             posterPath = item.posterPath,
             releaseDate = item.releaseDate,

@@ -196,6 +196,13 @@ fun FormattedDateText(date: String): String {
     return formattedDate
 }
 
+fun FormattedTime(runtime: Int?): String{
+    if (runtime == null || runtime <= 0) return "-"
+    val hours = runtime / 60
+    val minutes = runtime % 60
+    return "${hours}h ${minutes}m"
+}
+
 @Preview(showBackground = true)
 @Composable
 fun RatingCardPreview() {

@@ -51,6 +51,7 @@ import com.hmyh.moviejc.domain.feature.moviedetail.model.MovieDetail
 import com.hmyh.moviejc.domain.utils.movieDetailVO
 import com.hmyh.moviejc.movieui.widget.CardWhiteBackground
 import com.hmyh.moviejc.movieui.widget.FormattedDateText
+import com.hmyh.moviejc.movieui.widget.FormattedTime
 import com.hmyh.moviejc.movieui.widget.MovieDetailToolbar
 import com.hmyh.moviejc.movieui.widget.PosterItem
 import com.hmyh.moviejc.movieui.widget.RatingCard
@@ -256,23 +257,41 @@ private fun MovieDetailHeader(movieDetail: MovieDetail) {
         Spacer(modifier = Modifier.width(12.dp))
 
         val date = FormattedDateText(movieDetail.releaseDate)
+        val time = FormattedTime(movieDetail.runtime)
 
         Column {
             Text(
                 modifier = Modifier
-                    .padding(top = 40.dp),
+                    .padding(top = 60.dp),
                 text = movieDetail.title,
                 color = colorResource(id = R.color.textColorPrimary),
-                fontSize = 18.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 4.dp, end = 20.dp)
+            ) {
+                Text(
+                    text = date,
+                    color = colorResource(id = R.color.textColorPrimary),
+                    fontSize = 10.sp
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Text(
+                    text = "(${movieDetail.originalCountry.firstOrNull().toString()})",
+                    color = colorResource(id = R.color.textColorPrimary),
+                    fontSize = 10.sp
+                )
+            }
+
             Text(
-                modifier = Modifier
-                    .padding(top = 8.dp, end = 20.dp),
-                text = date,
+                text = time,
                 color = colorResource(id = R.color.textColorPrimary),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.W500
+                fontSize = 10.sp
             )
         }
 

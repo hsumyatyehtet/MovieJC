@@ -9,6 +9,7 @@ data class MovieDetailResponse(
     @Json(name = "backdrop_path")val backDropPack: String,
     @Json(name = "original_title")val originalTitle: String,
     @Json(name = "homepage")val homePage: String,
+    @Json(name = "origin_country")val originalCountry: List<String>,
     @Json(name = "overview")val overView: String,
     @Json(name = "poster_path")val posterPath: String,
     @Json(name = "release_date")val releaseDate: String,
