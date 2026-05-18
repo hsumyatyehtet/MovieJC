@@ -18,6 +18,7 @@ var movieDetailVO = MovieDetail(
     backDropPack = "/7HqLLVjdjhXS0Qoz1SgZofhkIpE.jpg",
     originalTitle = "Sample Movie",
     homePage = "https://www.samplemovie.com",
+    originalCountry = listOf("US"),
     overView = "This is a sample movie overview.",
     posterPath = "/7HqLLVjdjhXS0Qoz1SgZofhkIpE.jpg",
     releaseDate = "2025-01-01",

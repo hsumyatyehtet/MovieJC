@@ -5,7 +5,7 @@ import com.hmyh.moviejc.domain.mapper.UnidirectionalMap
 import com.hmyh.moviejc.network.feature.moviedetail.response.MovieDetailResponse
 import javax.inject.Inject
 
-class MovieDetailMapper @Inject constructor() :
+class MovieDetailNetworkMapper @Inject constructor() :
     UnidirectionalMap<MovieDetailResponse, MovieDetailEntity> {
     override fun map(item: MovieDetailResponse): MovieDetailEntity {
 
@@ -14,6 +14,7 @@ class MovieDetailMapper @Inject constructor() :
             backDropPack = item.backDropPack,
             originalTitle = item.originalTitle,
             homePage = item.homePage,
+            originalCountry = item.originalCountry,
             overView = item.overView,
             posterPath = item.posterPath,
             releaseDate = item.releaseDate,
