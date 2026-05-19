@@ -1,38 +1,47 @@
-
+#  Movie JC
 
 <p align="left">
-  <img src="https://github.com/user-attachments/assets/d6074509-7200-49be-b638-c7c8ff71c5c2" width="600"/>
+  <img src="https://github.com/user-attachments/assets/d6074509-7200-49be-b638-c7c8ff71c5c2" width="650"/>
 </p>
 
+>  **Work in Progress**
+>
+> This project is currently under development and not yet fully completed. Features and structure may change.
 
+---
 
 ##  Tech Stack
 
-### Language
+###  Language
 - Kotlin
 
-### UI
+###  UI
 - Jetpack Compose
 - Material 3
 
-### Architecture
+###  Architecture
 - MVVM
 - Clean Architecture
 
-### Asynchronous
+###  Asynchronous
 - Kotlin Coroutines
 - Flow / StateFlow
 
-### Dependency Injection
-- Hilt 
+###  Dependency Injection
+- Hilt
 
-### Networking
-- Retrofit 
+###  Networking
+- Retrofit
 - OkHttp
 
-### Image Loading
-- glide
+###  Image Loading
+- Glide
+
+---
 
 
+##  About
 
+This project is a simple Movie App built using modern Android development tools and architecture patterns.
 
+---
