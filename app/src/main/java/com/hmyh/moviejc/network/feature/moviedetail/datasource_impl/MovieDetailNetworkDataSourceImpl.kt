@@ -3,13 +3,13 @@ package com.hmyh.moviejc.network.feature.moviedetail.datasource_impl
 import com.hmyh.moviejc.data.feature.moviedetail.datasoruce.MovieDetailNetworkDataSource
 import com.hmyh.moviejc.data.feature.moviedetail.model.MovieDetailEntity
 import com.hmyh.moviejc.network.extension.getBody
-import com.hmyh.moviejc.network.feature.moviedetail.mapper.MovieDetailMapper
+import com.hmyh.moviejc.network.feature.moviedetail.mapper.MovieDetailNetworkMapper
 import com.hmyh.moviejc.network.feature.moviedetail.service.MovieDetailService
 import javax.inject.Inject
 
 class MovieDetailNetworkDataSourceImpl @Inject constructor(
     private val movieDetailService: MovieDetailService,
-    private val movieDetailMapper: MovieDetailMapper
+    private val movieDetailMapper: MovieDetailNetworkMapper
 ): MovieDetailNetworkDataSource {
     override suspend fun getMovieDetail(
         movieId: Long,

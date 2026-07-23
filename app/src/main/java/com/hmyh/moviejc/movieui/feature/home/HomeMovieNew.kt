@@ -92,7 +92,7 @@ fun HomeMovieNew(
         topBar = {
             HomeTopAppBar(
                 onSearchClick = {
-                    Timber.i("Search icon clicked")
+                    navController.navigate(MovieScreens.SearchMovie.name)
                 }
             )
         },
