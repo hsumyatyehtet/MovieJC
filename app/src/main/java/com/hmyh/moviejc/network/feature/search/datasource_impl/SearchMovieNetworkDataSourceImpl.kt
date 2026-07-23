@@ -13,9 +13,13 @@ class SearchMovieNetworkDataSourceImpl @Inject constructor(
     private val searchMovieNetworkMapper: SearchMovieNetworkMapper
 ) : SearchMovieNetworkDataSource {
 
-    override suspend fun searchMovies(apiKey: String, query: String): SearchMovieEntity {
+    override suspend fun searchMovies(
+        apiKey: String,
+        query: String,
+        page: Int
+    ): SearchMovieEntity {
         return try {
-            val response = service.searchMovies(apiKey = apiKey, query = query)
+            val response = service.searchMovies(apiKey = apiKey, query = query, page = page)
             if (response.isSuccessful) {
                 response.body()?.let(searchMovieNetworkMapper::map)
                     ?: SearchMovieEntity()

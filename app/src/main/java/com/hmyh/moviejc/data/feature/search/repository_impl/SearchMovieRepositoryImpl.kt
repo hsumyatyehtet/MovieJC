@@ -11,9 +11,13 @@ class SearchMovieRepositoryImpl @Inject constructor(
     private val searchMovieEntityMapper: SearchMovieEntityMapper
 ) : SearchMovieRepository {
 
-    override suspend fun searchMovies(apiKey: String, query: String): SearchMovieVO {
+    override suspend fun searchMovies(apiKey: String, query: String, page: Int): SearchMovieVO {
         return searchMovieEntityMapper.map(
-            searchMovieNetworkDataSource.searchMovies(apiKey = apiKey, query = query)
+            searchMovieNetworkDataSource.searchMovies(
+                apiKey = apiKey,
+                query = query,
+                page = page
+            )
         )
     }
 }

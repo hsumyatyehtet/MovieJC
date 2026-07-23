@@ -4,5 +4,5 @@ import com.hmyh.moviejc.domain.feature.search.model.SearchMovieVO
 
 interface SearchMovieRepository {
 
-    suspend fun searchMovies(apiKey: String, query: String): SearchMovieVO
+    suspend fun searchMovies(apiKey: String, query: String, page: Int): SearchMovieVO
 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -32,14 +33,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
@@ -60,6 +64,9 @@ import com.hmyh.moviejc.domain.feature.search.model.MovieListVO
 import com.hmyh.moviejc.domain.utils.searchMovieDummyList
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun SearchMovie(
@@ -77,6 +84,8 @@ fun SearchMovie(
 
     val query by viewModel.query.collectAsState()
     val movieListState by viewModel.movieListState.collectAsState()
+    val isLoadingMore by viewModel.isLoadingMore.collectAsState()
+    val canLoadMore by viewModel.canLoadMore.collectAsState()
 
     Scaffold(
         topBar = {
@@ -97,6 +106,9 @@ fun SearchMovie(
             SearchContent(
                 query = query,
                 movieListState = movieListState,
+                isLoadingMore = isLoadingMore,
+                canLoadMore = canLoadMore,
+                onLoadMore = viewModel::loadMore,
                 onItemClick = { movieId ->
                     navController.navigate(MovieScreens.DetailMovie.name + "/$movieId")
                 }
@@ -109,6 +121,9 @@ fun SearchMovie(
 fun SearchContent(
     query: String,
     movieListState: ListViewState<MovieListVO>,
+    isLoadingMore: Boolean,
+    canLoadMore: Boolean,
+    onLoadMore: () -> Unit,
     onItemClick: (Long) -> Unit
 ) {
     when (movieListState) {
@@ -128,20 +143,13 @@ fun SearchContent(
             if (movieList.isEmpty()) {
                 SearchEmptyMessage(text = "No movies found")
             } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(3),
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(items = movieList, key = { it.id }) { movie ->
-                        SearchMovieItem(
-                            movie = movie,
-                            onItemClick = onItemClick
-                        )
-                    }
-                }
+                SearchMovieGrid(
+                    movieList = movieList,
+                    isLoadingMore = isLoadingMore,
+                    canLoadMore = canLoadMore,
+                    onLoadMore = onLoadMore,
+                    onItemClick = onItemClick
+                )
             }
         }
 
@@ -154,6 +162,75 @@ fun SearchContent(
                 SearchEmptyMessage(text = "Search for movies")
             } else {
                 SearchEmptyMessage(text = "No movies found")
+            }
+        }
+    }
+}
+
+@Composable
+private fun SearchMovieGrid(
+    movieList: List<MovieListVO>,
+    isLoadingMore: Boolean,
+    canLoadMore: Boolean,
+    onLoadMore: () -> Unit,
+    onItemClick: (Long) -> Unit
+) {
+    val gridState = rememberLazyGridState()
+
+    LaunchedEffect(gridState, movieList.size, canLoadMore, isLoadingMore) {
+        snapshotFlow {
+            val layoutInfo = gridState.layoutInfo
+            val totalItems = layoutInfo.totalItemsCount
+            val lastVisibleIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+            Triple(lastVisibleIndex, totalItems, canLoadMore && !isLoadingMore)
+        }
+            .map { (lastVisibleIndex, totalItems, canTrigger) ->
+                canTrigger &&
+                    totalItems > 0 &&
+                    lastVisibleIndex >= 0 &&
+                    lastVisibleIndex >= totalItems - LOAD_MORE_THRESHOLD
+            }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect { onLoadMore() }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            state = gridState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(items = movieList, key = { it.id }) { movie ->
+                SearchMovieItem(
+                    movie = movie,
+                    onItemClick = onItemClick
+                )
+            }
+        }
+
+        if (isLoadingMore) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.35f))
+                    .pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                awaitPointerEvent()
+                            }
+                        }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(40.dp),
+                    strokeWidth = 3.dp,
+                    color = colorResource(id = R.color.colorPlayButtonBackground)
+                )
             }
         }
     }
@@ -308,6 +385,9 @@ fun SearchContentPreview() {
         SearchContent(
             query = "Inception",
             movieListState = ListViewState.Success(searchMovieDummyList),
+            isLoadingMore = false,
+            canLoadMore = true,
+            onLoadMore = {},
             onItemClick = {}
         )
     }
@@ -321,9 +401,14 @@ fun SearchMoviePreview() {
         SearchContent(
             query = "Movie",
             movieListState = ListViewState.Success(searchMovieDummyList),
+            isLoadingMore = true,
+            canLoadMore = false,
+            onLoadMore = {},
             onItemClick = {
                 navController.navigate(MovieScreens.DetailMovie.name + "/$it")
             }
         )
     }
 }
+
+private const val LOAD_MORE_THRESHOLD = 3

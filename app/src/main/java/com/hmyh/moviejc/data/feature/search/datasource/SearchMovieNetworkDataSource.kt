@@ -4,5 +4,5 @@ import com.hmyh.moviejc.data.feature.search.model.SearchMovieEntity
 
 interface SearchMovieNetworkDataSource {
 
-    suspend fun searchMovies(apiKey: String, query: String): SearchMovieEntity
+    suspend fun searchMovies(apiKey: String, query: String, page: Int): SearchMovieEntity
 }
