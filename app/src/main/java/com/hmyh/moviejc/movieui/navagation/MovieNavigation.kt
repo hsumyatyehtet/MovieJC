@@ -9,7 +9,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.hmyh.moviejc.movieui.feature.detail.MovieDetailNew
 import com.hmyh.moviejc.movieui.feature.home.HomeMovieNew
+import com.hmyh.moviejc.movieui.feature.nowplaying.NowPlayingMovies
+import com.hmyh.moviejc.movieui.feature.popular.PopularMovies
 import com.hmyh.moviejc.movieui.feature.search.SearchMovie
+import com.hmyh.moviejc.movieui.feature.toprated.TopRatedMovies
+import com.hmyh.moviejc.movieui.feature.upcoming.UpcomingMovies
 
 @Composable
 fun MovieNavigation(){
@@ -30,6 +34,18 @@ fun MovieNavigation(){
         }
         composable(MovieScreens.SearchMovie.name) {
             SearchMovie(navController)
+        }
+        composable(MovieScreens.NowPlayingMovies.name) {
+            NowPlayingMovies(navController)
+        }
+        composable(MovieScreens.PopularMovies.name) {
+            PopularMovies(navController)
+        }
+        composable(MovieScreens.TopRatedMovies.name) {
+            TopRatedMovies(navController)
+        }
+        composable(MovieScreens.UpcomingMovies.name) {
+            UpcomingMovies(navController)
         }
     }
 }
