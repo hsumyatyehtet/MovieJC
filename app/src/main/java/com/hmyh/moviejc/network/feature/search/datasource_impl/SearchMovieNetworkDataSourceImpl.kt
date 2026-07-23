@@ -4,6 +4,7 @@ import com.hmyh.moviejc.data.feature.search.datasource.SearchMovieNetworkDataSou
 import com.hmyh.moviejc.data.feature.search.model.SearchMovieEntity
 import com.hmyh.moviejc.network.feature.search.mapper.SearchMovieNetworkMapper
 import com.hmyh.moviejc.network.feature.search.service.SearchService
+import kotlinx.coroutines.CancellationException
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
@@ -27,6 +28,8 @@ class SearchMovieNetworkDataSourceImpl @Inject constructor(
                 Timber.e("Search API error: ${response.code()} - ${response.message()}")
                 SearchMovieEntity()
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: HttpException) {
             Timber.e(e, "Search network error")
             SearchMovieEntity()

@@ -8,6 +8,7 @@ import com.hmyh.moviejc.domain.feature.search.model.MovieListVO
 import com.hmyh.moviejc.domain.feature.search.usecase.GetSearchMovieUseCase
 import com.hmyh.moviejc.network.extension.API_KEY_DATA
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -101,6 +102,9 @@ class SearchMovieViewModel @Inject constructor(
 
             _movieListState.value = ListViewState.Success(accumulatedMovies.toList())
             _canLoadMore.value = currentPage < totalPages
+        } catch (e: CancellationException) {
+            // Expected when the user keeps typing and the previous search job is cancelled.
+            throw e
         } catch (e: Exception) {
             Timber.e(e)
             if (!append) {
