@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,13 +29,16 @@ import com.hmyh.moviejc.domain.utils.movieDummyVO
 import com.hmyh.moviejc.network.extension.PHOTO_PATH
 
 @Composable
-fun MovieItem(movie: MovieDisplayable, onItemClick: (Long) -> Unit) {
+fun MovieItem(
+    movie: MovieDisplayable,
+    onItemClick: (Long) -> Unit,
+    modifier: Modifier = Modifier.width(120.dp)
+) {
 
     val fullPosterPath = PHOTO_PATH + movie.posterPath
 
     Column(
-        modifier = Modifier
-            .width(120.dp)
+        modifier = modifier
             .clickable(
                 onClick = {
                     onItemClick(movie.id)
@@ -45,6 +49,7 @@ fun MovieItem(movie: MovieDisplayable, onItemClick: (Long) -> Unit) {
 
         Card(
             modifier = Modifier
+                .fillMaxWidth()
                 .height(180.dp),
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.colorTransparent)),
