@@ -2,6 +2,7 @@ package com.hmyh.moviejc.domain.utils
 
 import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
 import com.hmyh.moviejc.domain.feature.moviedetail.model.MovieDetail
+import com.hmyh.moviejc.domain.feature.search.model.MovieListVO
 
 var movieDummyVO = NowPlayingMovieVO(
     id = 1,
@@ -32,7 +33,7 @@ var movieDetailVO = MovieDetail(
 )
 
 val searchMovieDummyList = listOf(
-    NowPlayingMovieVO(
+    MovieListVO(
         id = 1,
         originalTitle = "Sample Movie",
         popularity = 8.5f,
@@ -41,7 +42,7 @@ val searchMovieDummyList = listOf(
         releaseDate = "2025-01-01",
         voteCount = 1000
     ),
-    NowPlayingMovieVO(
+    MovieListVO(
         id = 2,
         originalTitle = "Inception",
         popularity = 9.2f,
@@ -50,7 +51,7 @@ val searchMovieDummyList = listOf(
         releaseDate = "2010-07-16",
         voteCount = 32000
     ),
-    NowPlayingMovieVO(
+    MovieListVO(
         id = 3,
         originalTitle = "Interstellar",
         popularity = 9.0f,
@@ -59,7 +60,7 @@ val searchMovieDummyList = listOf(
         releaseDate = "2014-11-07",
         voteCount = 28000
     ),
-    NowPlayingMovieVO(
+    MovieListVO(
         id = 4,
         originalTitle = "The Dark Knight",
         popularity = 9.5f,
@@ -68,7 +69,7 @@ val searchMovieDummyList = listOf(
         releaseDate = "2008-07-18",
         voteCount = 35000
     ),
-    NowPlayingMovieVO(
+    MovieListVO(
         id = 5,
         originalTitle = "Avatar",
         popularity = 8.8f,
@@ -77,7 +78,7 @@ val searchMovieDummyList = listOf(
         releaseDate = "2009-12-18",
         voteCount = 27000
     ),
-    NowPlayingMovieVO(
+    MovieListVO(
         id = 6,
         originalTitle = "Dune",
         popularity = 8.1f,

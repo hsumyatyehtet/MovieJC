@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -54,7 +55,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.hmyh.moviejc.R
-import com.hmyh.moviejc.domain.feature.home.model.NowPlayingMovieVO
+import com.hmyh.moviejc.appbase.core.ListViewState
+import com.hmyh.moviejc.domain.feature.search.model.MovieListVO
 import com.hmyh.moviejc.domain.utils.searchMovieDummyList
 import com.hmyh.moviejc.movieui.navagation.MovieScreens
 import com.hmyh.moviejc.movieui.widget.MovieItem
@@ -74,7 +76,7 @@ fun SearchMovie(
     }
 
     val query by viewModel.query.collectAsState()
-    val movieList by viewModel.movieList.collectAsState()
+    val movieListState by viewModel.movieListState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -93,7 +95,8 @@ fun SearchMovie(
             color = colorResource(id = R.color.background_color)
         ) {
             SearchContent(
-                movieList = movieList,
+                query = query,
+                movieListState = movieListState,
                 onItemClick = { movieId ->
                     navController.navigate(MovieScreens.DetailMovie.name + "/$movieId")
                 }
@@ -104,43 +107,77 @@ fun SearchMovie(
 
 @Composable
 fun SearchContent(
-    movieList: List<NowPlayingMovieVO>,
+    query: String,
+    movieListState: ListViewState<MovieListVO>,
     onItemClick: (Long) -> Unit
 ) {
-    if (movieList.isEmpty()) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "No movies found",
-                color = Color.White,
-                style = MaterialTheme.typography.bodyLarge,
-                fontSize = 16.sp
-            )
-        }
-    } else {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(items = movieList) { movie ->
-                SearchMovieItem(
-                    movie = movie,
-                    onItemClick = onItemClick
+    when (movieListState) {
+        is ListViewState.Loading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = colorResource(id = R.color.colorPlayButtonBackground)
                 )
+            }
+        }
+
+        is ListViewState.Success -> {
+            val movieList = movieListState.value
+            if (movieList.isEmpty()) {
+                SearchEmptyMessage(text = "No movies found")
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(items = movieList, key = { it.id }) { movie ->
+                        SearchMovieItem(
+                            movie = movie,
+                            onItemClick = onItemClick
+                        )
+                    }
+                }
+            }
+        }
+
+        is ListViewState.Error -> {
+            SearchEmptyMessage(text = movieListState.errorMessage)
+        }
+
+        else -> {
+            if (query.isBlank()) {
+                SearchEmptyMessage(text = "Search for movies")
+            } else {
+                SearchEmptyMessage(text = "No movies found")
             }
         }
     }
 }
 
 @Composable
+private fun SearchEmptyMessage(text: String) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            style = MaterialTheme.typography.bodyLarge,
+            fontSize = 16.sp
+        )
+    }
+}
+
+@Composable
 fun SearchMovieItem(
-    movie: NowPlayingMovieVO,
+    movie: MovieListVO,
     onItemClick: (Long) -> Unit
 ) {
     Column(horizontalAlignment = Alignment.Start) {
@@ -269,7 +306,8 @@ fun SearchTopAppBarPreview() {
 fun SearchContentPreview() {
     Surface(color = colorResource(id = R.color.background_color)) {
         SearchContent(
-            movieList = searchMovieDummyList,
+            query = "Inception",
+            movieListState = ListViewState.Success(searchMovieDummyList),
             onItemClick = {}
         )
     }
@@ -281,7 +319,8 @@ fun SearchMoviePreview() {
     val navController = rememberNavController()
     Surface(color = colorResource(id = R.color.background_color)) {
         SearchContent(
-            movieList = searchMovieDummyList,
+            query = "Movie",
+            movieListState = ListViewState.Success(searchMovieDummyList),
             onItemClick = {
                 navController.navigate(MovieScreens.DetailMovie.name + "/$it")
             }
