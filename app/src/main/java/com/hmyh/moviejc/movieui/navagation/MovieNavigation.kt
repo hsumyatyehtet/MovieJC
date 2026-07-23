@@ -7,9 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.hmyh.moviejc.movieui.feature.detail.DetailMovie
 import com.hmyh.moviejc.movieui.feature.detail.MovieDetailNew
 import com.hmyh.moviejc.movieui.feature.home.HomeMovieNew
+import com.hmyh.moviejc.movieui.feature.search.SearchMovie
 
 @Composable
 fun MovieNavigation(){
@@ -27,6 +27,9 @@ fun MovieNavigation(){
 //                DetailMovie(navController, backStackEntry.arguments?.getLong("id")?: 0L)
                 MovieDetailNew(navController, backStackEntry.arguments?.getLong("id")?: 0L)
             }
+        }
+        composable(MovieScreens.SearchMovie.name) {
+            SearchMovie(navController)
         }
     }
 }
