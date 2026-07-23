@@ -116,7 +116,14 @@ fun HomeMovieNew(
                         is ListViewState.Success -> {
                             val movieList =
                                 (nowPlayingMovieListState as ListViewState.Success<NowPlayingMovieVO>).value
-                            MainContent(navController, movieList, "Now Playing Movies")
+                            MainContent(
+                                navController = navController,
+                                movieList = movieList,
+                                title = "Now Playing Movies",
+                                onViewAllClick = {
+                                    navController.navigate(MovieScreens.NowPlayingMovies.name)
+                                }
+                            )
                         }
 
                         is ListViewState.Loading -> {}
@@ -130,7 +137,14 @@ fun HomeMovieNew(
                         is ListViewState.Success -> {
                             val movieList =
                                 (popularMovieListState as ListViewState.Success<PopularMovieVO>).value
-                            MainContent(navController, movieList, "Popular Movies")
+                            MainContent(
+                                navController = navController,
+                                movieList = movieList,
+                                title = "Popular Movies",
+                                onViewAllClick = {
+                                    navController.navigate(MovieScreens.PopularMovies.name)
+                                }
+                            )
                         }
 
                         is ListViewState.Loading -> {
@@ -152,7 +166,14 @@ fun HomeMovieNew(
                         is ListViewState.Success -> {
                             val movieList =
                                 (topRatedMovieListState as ListViewState.Success<TopRatedMovieVO>).value
-                            MainContent(navController, movieList, "Top Rated Movies")
+                            MainContent(
+                                navController = navController,
+                                movieList = movieList,
+                                title = "Top Rated Movies",
+                                onViewAllClick = {
+                                    navController.navigate(MovieScreens.TopRatedMovies.name)
+                                }
+                            )
                         }
 
                         is ListViewState.Loading -> {
@@ -174,7 +195,14 @@ fun HomeMovieNew(
                         is ListViewState.Success -> {
                             val movieList =
                                 (upComingMovieListState as ListViewState.Success<UpcomingMovieVO>).value
-                            MainContent(navController, movieList, "UpComing Movies")
+                            MainContent(
+                                navController = navController,
+                                movieList = movieList,
+                                title = "UpComing Movies",
+                                onViewAllClick = {
+                                    navController.navigate(MovieScreens.UpcomingMovies.name)
+                                }
+                            )
                         }
 
                         is ListViewState.Loading -> {
@@ -197,15 +225,18 @@ fun HomeMovieNew(
 }
 
 @Composable
-fun MainContent(navController: NavController, movieList: List<MovieDisplayable>, title: String) {
+fun MainContent(
+    navController: NavController,
+    movieList: List<MovieDisplayable>,
+    title: String,
+    onViewAllClick: () -> Unit = { Timber.i("$title clicked") }
+) {
 
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
 
-        MovieTitle(title = title) {
-            Timber.i("$title clicked")
-        }
+        MovieTitle(title = title, onClickSeeAll = onViewAllClick)
         LazyRow(
             modifier = Modifier.padding(bottom = 8.dp),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 4.dp),
